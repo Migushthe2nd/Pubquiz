@@ -34,6 +34,7 @@
     "https": "^1.0.0",
     "install": "^0.13.0",
     "jsdom": "^15.2.0",
+    "klasa": "github:dirigeants/klasa",
     "node-fetch": "^2.6.0",
     "node-html-parser": "^1.1.16",
     "node-opus": "^0.3.1",
