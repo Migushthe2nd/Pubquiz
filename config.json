@@ -1,0 +1,13 @@
+{
+    "token": "NzAzOTIwNjU4MTk4OTU0MDU1.XqVseQ.CIKtqNfCP-gX0n1Gm1152SJVLvQ",
+    "giphy_api": "6bSZOfiIQuIU7GVQpaDJKagaifiS7vxN",
+    "prefix": "pq",
+    "database": {
+        "host": "localhost",
+        "port": "5432",
+        "database": "pubquiz",
+        "user": "postgres",
+        "password": "Lavalamp14&@"
+    },
+    "question_update_interval" : 10000
+}
