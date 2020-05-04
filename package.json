@@ -16,7 +16,6 @@
 		"better-sqlite3": "^5.4.1",
 		"crypto-js": "^3.1.9-1",
 		"discord.js": "github:discordjs/discord.js",
-		"discord.js-commando": "github:discordjs/Commando",
 		"dotenv": "^8.2.0",
 		"install": "^0.13.0",
 		"klasa": "github:dirigeants/klasa#master",
