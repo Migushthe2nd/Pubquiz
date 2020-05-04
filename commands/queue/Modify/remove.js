@@ -1,40 +1,36 @@
-const commando = require('discord.js-commando');
-const { v4 } = require('uuid');
-const { questionNew } = require('../../embeds')
-const { pgp, db } = require('../../db')
+const { Command } = require('klasa');
+const { db } = require('../../../db')
 
-module.exports = class UserInfoCommand extends commando.Command {
-    constructor(client) {
-        super(client, {
+module.exports = class extends Command {
+    constructor(...args) {
+        super(...args, {
             name: 'remove',
-            aliases: [],
-            group: 'queue',
-            memberName: 'remove',
             description: 'Remove a question from the queue.',
-            examples: ['remove 5 yes'],
-            guildOnly: true,
+            // examples: ['remove 5 yes'],
+            runIn: ['text'],
+            extendedHelp: [' - remove 5 yes'].join('\n'),
+            usage: '<questionNr:integer> <confirm:boolean>',
 
-            args: [
-                {
-                    key: 'questionNr',
-                    label: 'question number',
-                    prompt: 'Which question do you want to remove from the queue? Use the list command to see all set questions.',
-                    type: 'integer'
-                },
-                {
-                    key: 'confirm',
-                    prompt: 'This will remove the question. Are you sure? Respond with `yes` or `no`.',
-                    type: 'string',
-                    oneOf: ['yes', 'no']
-                }
-            ]
+            // args: [
+            //     {
+            //         key: 'questionNr',
+            //         label: 'question number',
+            //         prompt: 'Which question do you want to remove from the queue? Use the list command to see all set questions.',
+            //         type: 'integer'
+            //     },
+            //     {
+            //         key: 'confirm',
+            //         prompt: 'This will remove the question. Are you sure? Respond with `yes` or `no`.',
+            //         type: 'string',
+            //         oneOf: ['yes', 'no']
+            //     }
+            // ]
         });
     }
 
-    async run (message, { questionNr, confirm }) {
-        if (confirm === 'yes') {
+    async run (message, [questionNr, confirm]) {
+        if (confirm) {
             const creatorId = message.author.id
-            const creatorName = message.author.username
             const guildId = message.channel.guild.id
             const channelId = message.channel.id
 

@@ -1,34 +1,33 @@
-const commando = require('discord.js-commando');
-const { pgp, db } = require('../../db')
+const { Command } = require('klasa');
+const { db } = require('../../../db')
 
-module.exports = class UserInfoCommand extends commando.Command {
-    constructor(client) {
-        super(client, {
+module.exports = class extends Command {
+    constructor(...args) {
+        super(...args, {
             name: 'delete',
-            aliases: [],
-            group: 'main',
-            memberName: 'delete',
-            description: 'Stop the quiz and remove all Pubquiz-related data. This will also remove the questions. If you wish to keep those, use the end command. Only the original creator is able to use this command.',
-            guildOnly: true,
+            description: 'Delete a Pubquiz by UUID. Active quizes will be stopped if forced. This will remove questions. If you wish to keep those, use the end command to end the Pubquiz. Only the original creator of the Pubquiz is able to use this command.',
+            usage: '[UUID:uuid] <confirm:boolean|force>',
+            extendedHelp: [' - delete yes', ' - delete e52cf51d-1ae1-417c-a42e-f7e096d07d21 yes'].join('\n'),
+            runIn: ['text', 'dm'],
 
-            args: [
-                {
-                    key: 'uuid',
-                    label: 'UUID',
-                    prompt: 'Enter the UUID of the Pubquiz you wish to delete. Respond with `default` to use the active quiz.',
-                    type: 'uuid_or_default'
-                },
-                {
-                    key: 'confirm',
-                    prompt: 'This will remove all Pubquiz-related data. This will also remove the questions. If you wish to keep those, use the end command. Are you sure? Respond with `yes` or `no`.',
-                    type: 'string',
-                    oneOf: ['yes', 'no', 'force']
-                }
-            ]
+            // args: [
+            //     {
+            //         key: 'uuid',
+            //         label: 'UUID',
+            //         prompt: 'Enter the UUID of the Pubquiz you wish to delete. Respond with `default` to use the active quiz.',
+            //         type: 'uuid_or_default'
+            //     },
+            //     {
+            //         key: 'confirm',
+            //         prompt: 'This will remove all Pubquiz-related data. This will also remove the questions. If you wish to keep those, use the end command. Are you sure? Respond with `yes` or `no`.',
+            //         type: 'string',
+            //         oneOf: ['yes', 'no', 'force']
+            //     }
+            // ]
         });
     }
 
-    async run (message, { uuid, confirm }) {
+    async run (message, [UUID, confirm]) {
         const creatorId = message.author.id
 
         const creatorSession = await db.oneOrNone(`
@@ -37,15 +36,15 @@ module.exports = class UserInfoCommand extends commando.Command {
             WHERE creator_id = $1;
         `, [creatorId])
 
-        if (uuid === 'default')
-            uuid = creatorSession.pubquiz_uuid
+        if (!UUID)
+            UUID = creatorSession.pubquiz_uuid
 
-        if (confirm === 'yes' || confirm === 'force') {
+        if (confirm) {
             const doesExist = await db.oneOrNone(`
                 SELECT creator_id
                 FROM pubquiz
                 WHERE pubquiz_uuid = $1;
-            `, [uuid])
+            `, [UUID])
 
             if (doesExist) {
                 if (doesExist.creator_id === creatorId) {
@@ -54,16 +53,16 @@ module.exports = class UserInfoCommand extends commando.Command {
                         FROM pubquiz_sessions
                         WHERE pubquiz_uuid = $2
                             AND session_uuid != $1
-                    `, [creatorSession ? creatorSession.session_uuid : null, uuid])
+                    `, [creatorSession ? creatorSession.session_uuid : null, UUID])
 
                     if (!otherSessions.length > 0 || confirm === 'force') {
                         // Combine all sessions to remove a bit of duplicate code
                         if (creatorSession)
                             otherSessions.push(creatorSession)
                         try {
-                            try {
-                                // End sessions
-                                otherSessions.forEach(async session => {
+                            // End sessions
+                            otherSessions.forEach(async session => {
+                                try {
                                     const categoryChannel = await this.client.guilds.cache.get(session.guild_id).channels.cache.get(session.category_channel_id);
                                     const feedChannel = await this.client.guilds.cache.get(session.guild_id).channels.cache.get(session.feed_channel_id)
                                     if (categoryChannel) {
@@ -82,8 +81,11 @@ module.exports = class UserInfoCommand extends commando.Command {
                                             }, 200)
                                         }
                                     }
-                                })
-                            } catch (e) { }
+                                } catch (e) {
+                                    console.log(e)
+                                }
+                            })
+
 
                             db.none(`
                                 -- DELETE FROM pubquiz_scores
@@ -104,7 +106,7 @@ module.exports = class UserInfoCommand extends commando.Command {
 
                                 DELETE FROM pubquiz
                                 WHERE pubquiz_uuid = $1
-                            `, [uuid])
+                            `, [UUID])
 
                             message.reply("Pubquiz data **successfully deleted**.")
                         } catch (e) {

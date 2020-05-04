@@ -1,22 +1,18 @@
-const commando = require('discord.js-commando');
-const { v4 } = require('uuid');
-const { pgp, db } = require('../../db')
+const { Command } = require('klasa');
+const { db } = require('../../db')
 
-module.exports = class UserInfoCommand extends commando.Command {
-    constructor(client) {
-        super(client, {
+module.exports = class extends Command {
+    constructor(...args) {
+        super(...args, {
             name: 'list',
-            aliases: ['questions'],
-            group: 'queue',
-            memberName: 'list',
+            aliases: ['questions', 'queue'],
             description: 'Show all questions in the queue.',
-            guildOnly: true
+            runIn: 'text',
         });
     }
 
-    async run (message, { description, countdown, points, imageUrl, videoUrl }) {
+    async run (message) {
         const creatorId = message.author.id
-        const creatorName = message.author.username
         const guildId = message.channel.guild.id
         const channelId = message.channel.id
 

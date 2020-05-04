@@ -1,16 +1,25 @@
-const Discord = require("discord.js");
-const Commando = require("discord.js-commando");
-const path = require("path");
 require('dotenv').config()
 process.env.TZ = "Europe/Amsterdam";
-const { resumeQuizes } = require("./events/resume");
+const { resumeQuizes } = require("./resume/quizes");
+const { Client } = require('klasa');
 
-const client = new Commando.Client({
-	owner: "123859829453357056",
-	commandPrefix: process.env.BOT_PREFIX,
-});
-
-client.Discord = Discord;
+const client = new Client({
+	fetchAllMembers: false,
+	prefix: process.env.BOT_PREFIX,
+	commandEditing: false,
+	typing: true,
+	createPiecesFolders: false,
+	noPrefixDM: true,
+	ownerID: "123859829453357056",
+	pieceDefaults: {
+		commands: {
+			promptLimit: true,
+			quotedStringSupport: true,
+			usageDelim: ' '
+		}
+	},
+	readyMessage: (client) => `Successfully initialized as '${client.user.tag}'. Ready to serve ${client.guilds.cache.size} guilds.`
+})
 
 const activities_list = [
 	{
@@ -19,8 +28,8 @@ const activities_list = [
 	},
 ];
 
-client.on("ready", () => {
-	console.log(`Logged in as ${client.user.tag}!`);
+client.on("klasaReady", () => {
+
 	let activityIndex = 0;
 	setInterval(() => {
 		client.user.setActivity(activities_list[activityIndex].message, {
@@ -35,63 +44,17 @@ client.on("ready", () => {
 	resumeQuizes(client);
 });
 
-client.registry
-	.registerGroups([
-		["main", "General commands"],
-		["queue", "Manage questions"],
-	])
-	.registerDefaults()
-	.registerTypesIn(path.join(__dirname, "types"))
-	.registerCommandsIn(path.join(__dirname, "commands"));
-
-// const canUseCommand = (msg) => {
-// 	return new Promise(resolve => {
-// 		setTimeout(() => {
-// 			resolve('5 seconds passed')
-// 		}, 5000)
-// 	})
-// }
-
-// client.dispatcher.addInhibitor(async msg => {
-// 	if (true) {
-// 		return {
-// 			reason: 'cool',
-// 			response: msg.reply(await canUseCommand(msg))
-// 		};
-// 	}
-// });
-
-// client.dispatcher.addInhibitor(msg => {
-// 	if (true) {
-// 		msg.reply("you must be a member to use my commands.")
-// 			.then((replyMsg) => {
-// 				if (true)
-// 				return { reason: "User is not a member", response: replyMsg };
-// 				else return { reason: "User is not a member", response: replyMsg[0] };
-// 			})
-// 			.catch((error) => error);
-// 	}
-// 	else return false
-// });
-
-// Block mention as prefix
-// client.dispatcher.addInhibitor((msg) => {
-// 	if (msg.content.startsWith(client.user.toString().replace('<@', '<@!')) && msg.isCommand) {
-// 		return 'mention prefix disabled'
-// 	} else return false
-// });
-
-client.on("message", (msg) => {
-	if (msg.author.bot) return;
-	if (
-		!msg.content.startsWith(client.user.toString().replace("<@", "<@!")) &&
-		msg.isCommand
-	)
-		return;
-
-	// const bericht = msg.content;
-	// const berichtNoCaps = msg.content.toLowerCase();
-	// Custom message actions
-});
-
 client.login(process.env.BOT_TOKEN);
+
+// client.on("message", (msg) => {
+// 	if (msg.author.bot) return;
+// 	if (
+// 		!msg.content.startsWith(client.user.toString().replace("<@", "<@!")) &&
+// 		msg.isCommand
+// 	)
+// 		return;
+
+// 	// const bericht = msg.content;
+// 	// const berichtNoCaps = msg.content.toLowerCase();
+// 	// Custom message actions
+// });
