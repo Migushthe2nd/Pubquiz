@@ -1,31 +1,28 @@
-const commando = require('discord.js-commando');
-const { pgp, db } = require('../../db')
+const { Command } = require('klasa');
+const { db } = require('../../../db')
 
-module.exports = class UserInfoCommand extends commando.Command {
-    constructor(client) {
-        super(client, {
+module.exports = class extends Command {
+    constructor(...args) {
+        super(...args, {
             name: 'end',
-            aliases: [],
-            group: 'main',
-            memberName: 'end',
             description: 'Stop the quiz and remove all Pubquiz-related channels.',
-            guildOnly: true,
+            runIn: ['text'],
+            usage: '<confirm:boolean>',
 
-            args: [
-                {
-                    key: 'confirm',
-                    prompt: 'This will remove all Pubquiz-related channels. Are you sure? Respond with `yes` or `no`.',
-                    type: 'string',
-                    oneOf: ['yes', 'no']
-                }
-            ]
+            // args: [
+            //     {
+            //         key: 'confirm',
+            //         prompt: 'This will remove all Pubquiz-related channels. Are you sure? Respond with `yes` or `no`.',
+            //         type: 'string',
+            //         oneOf: ['yes', 'no']
+            //     }
+            // ]
         });
     }
 
-    async run (message, { confirm }) {
-        if (confirm === 'yes') {
+    async run (message, [confirm]) {
+        if (confirm) {
             const creatorId = message.author.id
-            const creatorName = message.author.username
             const channelId = message.channel.id
             const guildId = message.channel.guild.id
 

@@ -1,21 +1,19 @@
 const Discord = require("discord.js");
 const { quizDetails, questionNew, answerDividerAbove } = require('../embeds')
-const { pgp, db } = require('../db')
+const { db } = require('../db')
 
 const question_update_interval = 10000
 
 let joinMessage = null
 let participantsCollector = null
 let beforeCloseParticipants = null
-exports.watchJoinMessage = (message, { sessionUuid, creator, categoryChannel, dbParticipants, openedTime, imageUrl }) => {
-    const guildId = message.channel.guild.id
-    const channelId = message.channel.id
+exports.watchJoinMessage = (message, { sessionUuid, creator, categoryChannel, dbParticipants, openedTime }) => {
     joinMessage = message
 
     joinMessage.react("✋")
 
     const joinFilter = (reaction, user) => {
-        return reaction.emoji.name === "✋" && user.id !== creator.id && user.id !== message.author.id;
+        return reaction.emoji.name === "✋" && user.id !== creator.id && user.id !== message.author.id && (48 - joinMessage.guild.channels.cache.size >= 0);
     }
 
     participantsCollector = new Discord.ReactionCollector(message, joinFilter, { dispose: true });
@@ -27,6 +25,7 @@ exports.watchJoinMessage = (message, { sessionUuid, creator, categoryChannel, db
             message.embeds.length > 0 ? message.embeds[0].description : null,
             creator,
             participants,
+            48 - joinMessage.guild.channels.cache.size,
             openedTime,
             message.embeds.length > 0 ? message.embeds[0].thumbnail ? message.embeds[0].thumbnail.url : null : null,
             false
@@ -133,6 +132,8 @@ exports.watchJoinMessage = (message, { sessionUuid, creator, categoryChannel, db
             updateMessage(beforeCloseParticipants || dbParticipants)
         }
     })
+
+    updateMessage(beforeCloseParticipants || dbParticipants)
 }
 
 exports.stopJoinMessage = async (sessionUuid) => {
@@ -161,13 +162,16 @@ exports.stopJoinMessage = async (sessionUuid) => {
                         avatarURL: joinMessage.embeds.length > 0 ? joinMessage.embeds[0].author.iconURL : null
                     },
                     results.participants,
+                    48 - joinMessage.guild.channels.cache.size,
                     results.opened_time,
                     joinMessage.embeds.length > 0 ? joinMessage.embeds[0].thumbnail ? joinMessage.embeds[0].thumbnail.url : null : null,
                     true
                 ))
                 joinMessage = null
             }
-        } catch (e) { }
+        } catch (e) {
+            console.error(e)
+        }
     }
 }
 

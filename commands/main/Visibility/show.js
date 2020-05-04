@@ -1,21 +1,17 @@
-const commando = require('discord.js-commando');
-const { pgp, db } = require('../../db')
+const { Command } = require('klasa');
+const { db } = require('../../../db')
 
-module.exports = class UserInfoCommand extends commando.Command {
-    constructor(client) {
-        super(client, {
-            name: 'hide',
-            aliases: [],
-            group: 'main',
-            memberName: 'hide',
-            description: 'Hide the Pubquiz for non-participants.',
-            guildOnly: true
+module.exports = class extends Command {
+    constructor(...args) {
+        super(...args, {
+            name: 'show',
+            description: 'Make the Pubquiz visible in the server.',
+            runIn: 'text',
         });
     }
 
-    async run (message, { title, description }) {
+    async run (message) {
         const creatorId = message.author.id
-        const creatorName = message.author.username
         const channelId = message.channel.id
         const guildId = message.channel.guild.id
 
@@ -30,12 +26,12 @@ module.exports = class UserInfoCommand extends commando.Command {
                 try {
                     const feedChannel = await message.channel.guild.channels.cache.get(results.feed_channel_id)
 
-                    // Take guild permissions for viewing
+                    // Add guild permissions for viewing
                     feedChannel.updateOverwrite(guildId, {
-                        VIEW_CHANNEL: false
+                        VIEW_CHANNEL: true
                     })
 
-                    message.reply("The Pubquiz was **hidden successfully**!")
+                    message.reply("The Pubquiz was **shown successfully**!")
                 } catch (e) {
                     console.log(e)
                     message.reply("Something **went wrong** while trying to open the Pubquiz for people to join :/")

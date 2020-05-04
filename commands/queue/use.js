@@ -1,32 +1,30 @@
-const commando = require('discord.js-commando');
-const { v4 } = require('uuid');
+const { Command } = require('klasa');
 const { newPubquiz } = require('../../embeds')
-const { pgp, db } = require('../../db')
+const { db } = require('../../db')
 
-module.exports = class UserInfoCommand extends commando.Command {
-    constructor(client) {
-        super(client, {
+module.exports = class extends Command {
+    constructor(...args) {
+        super(...args, {
             name: 'use',
-            aliases: [],
-            group: 'queue',
-            memberName: 'use',
-            description: 'Use an existing Pubquiz. The current queue will be replaced with the new one! If you wish to go back, use this command again and specify the UUID I DM\'ed you earlier.',
-            examples: ['use 902fa8c6-8a23-11ea-bc55-0242ac130003'],
-            guildOnly: true,
+            description: 'Use questions from an existing Pubquiz. The current queue will be replaced with the new one! If you wish to go back, use this command again and specify the UUID I DM\'ed you earlier.',
+            // examples: ['use 902fa8c6-8a23-11ea-bc55-0242ac130003'],
+            runIn: ['text'],
+            extendedHelp: [' - use 902fa8c6-8a23-11ea-bc55-0242ac130003'].join('\n'),
+            usage: '<UUID:uuid>',
 
-            args: [
-                {
-                    key: 'uuid',
-                    label: 'UUID',
-                    prompt: 'Enter the UUID of the Pubquiz you want to use. The current queue will be replaced with the new one! If you wish to go back, use this command again and specify the UUID I DM\'ed you earlier.',
-                    type: 'uuid',
-                    wait: 60
-                }
-            ]
+            // args: [
+            //     {
+            //         key: 'uuid',
+            //         label: 'UUID',
+            //         prompt: 'Enter the UUID of the Pubquiz you want to use. The current queue will be replaced with the new one! If you wish to go back, use this command again and specify the UUID I DM\'ed you earlier.',
+            //         type: 'uuid',
+            //         wait: 60
+            //     }
+            // ]
         });
     }
 
-    async run (message, { uuid }) {
+    async run (message, [uuid]) {
         const creatorId = message.author.id
         const creatorName = message.author.username
         const guildId = message.channel.guild.id

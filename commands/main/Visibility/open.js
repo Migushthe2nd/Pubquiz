@@ -1,23 +1,19 @@
-const commando = require('discord.js-commando');
-const { watchJoinMessage } = require('../../events/watch_message')
-const { quizDetails } = require('../../embeds')
-const { pgp, db } = require('../../db')
+const { Command } = require('klasa');
+const { watchJoinMessage } = require('../../../resume/watch_message')
+const { quizDetails } = require('../../../embeds')
+const { db } = require('../../../db')
 
-module.exports = class UserInfoCommand extends commando.Command {
-    constructor(client) {
-        super(client, {
+module.exports = class extends Command {
+    constructor(...args) {
+        super(...args, {
             name: 'open',
-            aliases: [],
-            group: 'main',
-            memberName: 'open',
             description: 'Allow people to see and join the Pubquiz. This will send the join message in #feed.',
-            guildOnly: true
+            runIn: ['text'],
         });
     }
 
     async run (message) {
         const creatorId = message.author.id
-        const creatorName = message.author.username
         const channelId = message.channel.id
         const guildId = message.channel.guild.id
 
@@ -59,8 +55,9 @@ module.exports = class UserInfoCommand extends commando.Command {
                                     results.description,
                                     message.author,
                                     null,
+                                    feedChannel.guild.channels.cache.size,
                                     null,
-                                    results.image_url
+                                    results.image_url,
                                 )).then(async (joinMessage) => {
 
                                     const { opened_time } = await db.one(`

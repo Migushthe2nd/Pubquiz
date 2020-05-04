@@ -1,31 +1,29 @@
-const commando = require('discord.js-commando');
-const { pgp, db } = require('../../db')
+const { Command } = require('klasa');
+const { db } = require('../../db')
 
-module.exports = class UserInfoCommand extends commando.Command {
-    constructor(client) {
-        super(client, {
+module.exports = class extends Command {
+    constructor(...args) {
+        super(...args, {
             name: 'clearchat',
-            aliases: [],
-            group: 'main',
-            memberName: 'clearchat',
+            runIn: ['text'],
             description: 'Remove all messages in #feed or #controls depending on where you use it. Does not remove the join and help messages.',
-            guildOnly: true,
+            usage: '<confirm:boolean>',
+            promptLimit: true
 
-            args: [
-                {
-                    key: 'confirm',
-                    prompt: 'This will remove all messages in #feed or #controls except the join message. Are you sure? Respond with `yes` or `no`.',
-                    type: 'string',
-                    oneOf: ['yes', 'no']
-                }
-            ]
+            // args: [
+            //     {
+            //         key: 'confirm',
+            //         prompt: 'This will remove all messages in #feed or #controls except the join message. Are you sure? Respond with `yes` or `no`.',
+            //         type: 'string',
+            //         oneOf: ['yes', 'no']
+            //     }
+            // ]
         });
     }
 
-    async run (message, { confirm }) {
-        if (confirm === 'yes') {
+    async run (message, [confirm]) {
+        if (confirm) {
             const creatorId = message.author.id
-            const creatorName = message.author.username
             const channelId = message.channel.id
             const guildId = message.channel.guild.id
 

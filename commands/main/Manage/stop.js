@@ -1,32 +1,30 @@
-const commando = require('discord.js-commando');
-const { stopQuestion } = require('../../events/watch_message')
-const { pgp, db } = require('../../db')
+const { Command } = require('klasa');
+const { stopQuestion } = require('../../../resume/watch_message')
+const { db } = require('../../../db')
 
-module.exports = class UserInfoCommand extends commando.Command {
-    constructor(client) {
-        super(client, {
+module.exports = class extends Command {
+    constructor(...args) {
+        super(...args, {
             name: 'stop',
             aliases: ['lock'],
-            group: 'main',
-            memberName: 'stop',
             description: 'Stop the quiz. This will lock the answers channels and end the question.',
-            guildOnly: true,
+            runIn: ['text'],
+            usage: '<confirm:boolean>',
 
-            args: [
-                {
-                    key: 'confirm',
-                    prompt: 'This will lock the answers channels and end the question. Are you sure? Respond with `yes` or `no`.',
-                    type: 'string',
-                    oneOf: ['yes', 'no']
-                }
-            ]
+            // args: [
+            //     {
+            //         key: 'confirm',
+            //         prompt: 'This will lock the answers channels and end the question. Are you sure? Respond with `yes` or `no`.',
+            //         type: 'string',
+            //         oneOf: ['yes', 'no']
+            //     }
+            // ]
         });
     }
 
-    async run (message, { confirm }) {
-        if (confirm === 'yes') {
+    async run (message, [confirm]) {
+        if (confirm) {
             const creatorId = message.author.id
-            const creatorName = message.author.username
             const channelId = message.channel.id
             const guildId = message.channel.guild.id
 
@@ -44,7 +42,7 @@ module.exports = class UserInfoCommand extends commando.Command {
                                 const questionMessage = await message.guild.channels.cache.get(results.feed_channel_id).messages.fetch(results.question_message_id)
 
                                 stopQuestion(questionMessage, {
-                                    sessionUuid: results.session_uuid, 
+                                    sessionUuid: results.session_uuid,
                                     questionNr: results.question_nr,
                                     creator: message.author
                                 })

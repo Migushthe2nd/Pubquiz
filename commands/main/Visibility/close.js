@@ -1,22 +1,19 @@
-const commando = require('discord.js-commando');
-const { stopJoinMessage } = require('../../events/watch_message')
-const { pgp, db } = require('../../db')
+const { Command } = require('klasa');
+const { stopJoinMessage } = require('../../../resume/watch_message')
+const { db } = require('../../../db')
 
-module.exports = class UserInfoCommand extends commando.Command {
-    constructor(client) {
-        super(client, {
+module.exports = class extends Command {
+    constructor(...args) {
+        super(...args, {
             name: 'close',
-            aliases: [],
-            group: 'main',
-            memberName: 'close',
+            runIn: ['text'],
             description: 'Close participation.',
-            guildOnly: true
+            promptLimit: true
         });
     }
 
-    async run (message, { title, description }) {
+    async run (message) {
         const creatorId = message.author.id
-        const creatorName = message.author.username
         const channelId = message.channel.id
         const guildId = message.channel.guild.id
 

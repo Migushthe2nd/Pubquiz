@@ -20,7 +20,7 @@ const fancyTimeFormat = time => {
     return ret;
 }
 
-exports.quizDetails = (title, description, creator, participants, openedTime, imageUrl, closed) => {
+exports.quizDetails = (title, description, creator, participants, placesLeft, openedTime, imageUrl, closed) => {
     // Een optie is om hier de previous message mee te geven zodat automatisch de oude waarde gebruikt kan worden waarneer niet gegeven
     let embed = new Discord.MessageEmbed()
         .setColor(global.color)
@@ -64,16 +64,16 @@ exports.quizDetails = (title, description, creator, participants, openedTime, im
         for (let f = 0; f < participantsStrings.length; f++) {
             if (f === participantsStrings.length - 1 && andMore) {
                 if (!closed)
-                    embed.addField(`Participants (${participants.length})`, participantsStrings[f] + '\nAnd more...')
+                    embed.addField(`Participants (${participants.length} - ${placesLeft > 0 ? placesLeft : 0} left)`, participantsStrings[f] + '\nAnd more...')
                 else {
-                    embed.addField(`Participants (${participants.length})`, participantsStrings[f] + '\nAnd more...')
+                    embed.addField(`Participants (${participants.length} - ${placesLeft > 0 ? placesLeft : 0} left)`, participantsStrings[f] + '\nAnd more...')
                 }
                 break;
             } else if (participantsStrings[f] !== '') {
                 if (!closed)
-                    embed.addField(`Participants (${participants.length})`, participantsStrings[f])
+                    embed.addField(`Participants (${participants.length} - ${placesLeft > 0 ? placesLeft : 0} left)`, participantsStrings[f])
                 else {
-                    embed.addField(`Participants (${participants.length})`, participantsStrings[f])
+                    embed.addField(`Participants (${participants.length} - ${placesLeft > 0 ? placesLeft : 0} left)`, participantsStrings[f])
                 }
             }
         }
@@ -84,7 +84,8 @@ exports.quizDetails = (title, description, creator, participants, openedTime, im
     else
         embed.addField("How to join", "*Participation closed*")
 
-    embed.addField("How to play", "When a question starts, it is sent here. You may answer in the channel created for you. The host can see these and optionally review them. Modified messages will not be reviewed.")
+    embed.addField("How to play", "When a question starts, it is sent here. You may answer in the text channel created for you. The host can see these and optionally review them.")
+    // embed.addField("How to play", "When a question starts, it is sent here. You may answer in the text channel created for you. The host can see these and optionally review them. Modified messages will not be reviewed.")
 
     if (imageUrl)
         embed.setThumbnail(imageUrl)
@@ -94,7 +95,7 @@ exports.quizDetails = (title, description, creator, participants, openedTime, im
     else
         embed.setTimestamp()
 
-    // ~ 325 (max) chars over in embed voor andere dingen (met titel, description: max 50 char per -> 225 over)
+    // ~ 310 (max) chars over in embed voor andere dingen (met titel, description: max 50 char per -> 200 over)
 
     return embed
 }
@@ -170,7 +171,7 @@ exports.newPubquiz = (creatorName, creatorAvatarURL, title, description, questio
         embed.addField(`Password`, `\`${password}\``)
 
     if (uuid || password)
-        embed.addField('\u200B', 'You may share the UUID with others so that they can also use your Pubquiz. They will need to make a copy before they can edit the queue. \nUsing the password you can edit the Pubquiz either in Discord or onine (in the future).\nPubquizes without questions will be removed after 7 days.')
+        embed.addField('\u200B', 'You may share the UUID with others so that they can also use your Pubquiz. They will need to make a copy before they can edit it. \nUsing the password you can edit the Pubquiz either in Discord or onine (in the future).\nPubquizes without questions will be removed after 7 days.')
 
     return embed
 }

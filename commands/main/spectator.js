@@ -1,30 +1,26 @@
-const commando = require('discord.js-commando');
-const { pgp, db } = require('../../db')
+const { Command } = require('klasa');
+const { db } = require('../../db')
 
-module.exports = class UserInfoCommand extends commando.Command {
-    constructor(client) {
-        super(client, {
+module.exports = class extends Command {
+    constructor(...args) {
+        super(...args, {
             name: 'spectator',
-            aliases: [],
-            group: 'main',
-            memberName: 'spectator',
             description: 'Toggle spectator for a user. This will allow them to view the answers channels, unlike just keeping the Pubquiz visible.',
-            guildOnly: true,
+            runIn: ['text'],
+            usage: '<member:member>',
 
-            args: [
-                {
-                    key: 'member',
-                    prompt: 'Which member do you wan\'t to add as spectator?',
-                    type: 'member'
-                }
-            ]
+            // args: [
+            //     {
+            //         key: 'member',
+            //         prompt: 'Which member do you wan\'t to add as spectator?',
+            //         type: 'member'
+            //     }
+            // ]
         });
     }
 
-    async run (message, { member }) {
+    async run (message, [member]) {
         const creatorId = message.author.id
-        const creatorName = message.author.username
-        const channelId = message.channel.id
         const guildId = message.channel.guild.id
 
         const results = await db.oneOrNone(`
