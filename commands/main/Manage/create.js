@@ -173,6 +173,7 @@ module.exports = class extends Command {
 
 				const helpMessageIds = []
 				helpMessages.forEach(message => {
+					/* global BigInt */
 					helpMessageIds.push(BigInt(message.id))
 				})
 
