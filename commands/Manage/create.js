@@ -1,7 +1,7 @@
 const { Command, util: { isFunction } } = require('klasa');
-const { newPubquiz } = require('../../../embeds')
+const { newPubquiz } = require('../../embeds')
 const { v4 } = require('uuid');
-const { db } = require('../../../db')
+const { db } = require('../../db')
 
 const has = (obj, key) => Object.prototype.hasOwnProperty.call(obj, key);
 

@@ -1,7 +1,7 @@
 const { Command } = require('klasa');
-const { stopJoinMessage, startQuestionCountdown } = require('../../../resume/watch_message')
-const { questionNew } = require('../../../embeds')
-const { db } = require('../../../db')
+const { stopJoinMessage, startQuestionCountdown } = require('../../resume/watch_message')
+const { questionNew } = require('../../embeds')
+const { db } = require('../../db')
 
 module.exports = class extends Command {
     constructor(...args) {

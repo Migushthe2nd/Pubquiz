@@ -1,6 +1,6 @@
 const { Command } = require('klasa');
-const { stopQuestion } = require('../../../resume/watch_message')
-const { db } = require('../../../db')
+const { stopQuestion } = require('../../resume/watch_message')
+const { db } = require('../../db')
 
 module.exports = class extends Command {
     constructor(...args) {

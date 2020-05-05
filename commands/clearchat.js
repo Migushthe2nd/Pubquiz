@@ -1,5 +1,5 @@
 const { Command } = require('klasa');
-const { db } = require('../../db')
+const { db } = require('../db')
 
 module.exports = class extends Command {
     constructor(...args) {
