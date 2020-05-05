@@ -26,6 +26,8 @@ module.exports = class extends Language {
                 '• Question types (open, multiple choice)',
                 '• Automatic multiple choice checking',
                 '• Leaderboards',
+                '',
+                'Credits to Kaytjuh for the logo design.'
             ],
             COMMAND_CONF_RESET: (key, response) => `The key **${key}** has been reset to: \`${response}\``
         };
