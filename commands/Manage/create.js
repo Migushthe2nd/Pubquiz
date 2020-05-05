@@ -239,7 +239,6 @@ module.exports = class extends Command {
 					help[command.category][command.subCategory].push(`${command.name.padEnd(longest)} :: ${description}`);
 					if (command.usage && command.usage.usageString) help[command.category][command.subCategory].push(`	${message.language.get('COMMAND_HELP_USAGE')}: ${command.usage.nearlyFullUsage}`)
 					if (!isFunction(command.extendedHelp)) help[command.category][command.subCategory].push(`	${message.language.get('COMMAND_HELP_EXAMPLES')}:`, command.extendedHelp.split('\n').map(i => `	${i}`).join('\n'))
-
 				})
 				.catch(() => {
 					// noop
