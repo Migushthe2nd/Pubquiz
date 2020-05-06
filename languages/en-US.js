@@ -1,4 +1,5 @@
 const { Language } = require('klasa');
+const config = require('../config.json')
 
 module.exports = class extends Language {
 
@@ -27,7 +28,9 @@ module.exports = class extends Language {
                 '• Automatic multiple choice checking',
                 '• Leaderboards',
                 '',
-                'Credits to Kaytjuh for the logo design.'
+                'Credits to Kaytjuh for the logo design.',
+                '',
+                `Pubquiz V${config.version}`
             ],
             COMMAND_CONF_RESET: (key, response) => `The key **${key}** has been reset to: \`${response}\``
         };
