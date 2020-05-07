@@ -31,7 +31,7 @@ module.exports = class extends Language {
                 '',
                 'Credits to Kaytjuh for the logo design.',
                 '',
-                'Found a bug or want to request a feature? Let me know: Migush#4096',
+                'Found a bug or want to request a feature? Let me know: Migush#4096.',
                 '',
                 `Pubquiz V${config.version}`,
                 '------------```'

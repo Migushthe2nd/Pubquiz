@@ -130,7 +130,7 @@ module.exports = class extends Inhibitor {
                             case 'IS_NOT_PARTICIPANT':
                                 if (participation === undefined) message.resolved.participation = await getParticipation(authorId)
                                 if (participation)
-                                    throw `You are **already participating** in a Pubquiz here: ${this.client.guilds.cache.get(participation.guild_id).channels.cache.get(participation.feed_channel_id)}`
+                                    throw `You are **already participating** in a Pubquiz here: ${this.client.guilds.cache.get(participation.guild_id).channels.cache.get(participation.feed_channel_id)}.`
                                 break;
 
                             case 'CORRECT_GUILD':
