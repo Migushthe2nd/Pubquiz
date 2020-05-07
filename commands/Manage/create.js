@@ -22,7 +22,7 @@ module.exports = class extends PubCommand {
 			name: 'create',
 			description: 'Create a new Pubquiz. Do `help create` to view all parameters.',
 			usage: '[title:string{,50}] [description:string{,50}] [image:image]',
-			examples: ['create', 'create "Epic Pubquiz" "The biggest Pubquiz for you guys yet!" ', 'create "The best Pubquiz"'].join('\n'),
+			examples: ['create', 'create "Epic Pubquiz" "The biggest Pubquiz for you guys yet!" ', 'create "The best Pubquiz"'],
 			runIn: ['text'],
 			cooldown: 10,
 

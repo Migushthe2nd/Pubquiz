@@ -6,7 +6,7 @@ module.exports = class extends PubCommand {
         super(...args, {
             name: 'show',
             description: 'Make the Pubquiz visible in the server.',
-            runIn: 'text',
+            runIn: ['text'],
             cooldown: 5,
         });
     }
