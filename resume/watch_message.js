@@ -20,7 +20,6 @@ exports.watchJoinMessage = (message, { sessionUuid, creator, categoryChannel, db
 
     const updateMessage = async (participants, joined) => {
         beforeCloseParticipants = participants
-        console.log(joinMessage.channel.parent.children)
         joinMessage = await message.edit(quizDetails(
             message.embeds.length > 0 ? message.embeds[0].title : null,
             message.embeds.length > 0 ? message.embeds[0].description : null,
