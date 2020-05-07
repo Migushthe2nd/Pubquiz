@@ -8,6 +8,7 @@ module.exports = class extends PubCommand {
             description: 'Show all questions in the queue.',
             runIn: ['text'],
             conditions: ['ACTIVE_SESSION', 'CONTROLS_CHANNEL', 'HAS_QUESTIONS'],
+            requiredPermissions: ['VIEW_CHANNEL', 'SEND_MESSAGES'],
             cooldown: 2,
         });
     }

@@ -9,6 +9,7 @@ module.exports = class extends PubCommand {
             runIn: ['text'],
             usage: '<confirm:boolean>',
             conditions: ['ACTIVE_SESSION', 'CONTROLS_CHANNEL'],
+            requiredPermissions: ['MANAGE_GUILD', 'VIEW_CHANNEL', 'SEND_MESSAGES'],
             cooldown: 1,
 
             // args: [

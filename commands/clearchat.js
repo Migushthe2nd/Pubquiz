@@ -9,6 +9,7 @@ module.exports = class extends PubCommand {
             usage: '<confirm:boolean>',
             promptLimit: true,
             conditions: ['ACTIVE_SESSION', 'CONTROLS_CHANNEL_OR_FEED_CHANNEL'],
+            requiredPermissions: ['MANAGE_GUILD', 'VIEW_CHANNEL', 'SEND_MESSAGES', 'MANAGE_MESSAGES'],
             cooldown: 5,
 
             // args: [

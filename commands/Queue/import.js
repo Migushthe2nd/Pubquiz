@@ -11,6 +11,7 @@ module.exports = class extends PubCommand {
             runIn: ['text'],
             usage: '<spreadsheet:file>',
             conditions: ['ACTIVE_SESSION', 'CONTROLS_CHANNEL'],
+            requiredPermissions: ['VIEW_CHANNEL', 'SEND_MESSAGES'],
             enabled: false,
             cooldown: 10,
 

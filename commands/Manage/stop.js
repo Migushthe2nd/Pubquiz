@@ -11,6 +11,7 @@ module.exports = class extends PubCommand {
             runIn: ['text'],
             usage: '<confirm:boolean>',
             conditions: ['ACTIVE_SESSION', 'CONTROLS_CHANNEL', 'HAS_STARTED', 'IS_NOT_ACTIVE_COUNTDOWN'],
+            requiredPermissions: ['MANAGE_GUILD', 'VIEW_CHANNEL', 'SEND_MESSAGES', 'ADD_REACTIONS', 'MANAGE_ROLES'],
             cooldown: 1,
 
             // args: [

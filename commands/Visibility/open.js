@@ -10,6 +10,7 @@ module.exports = class extends PubCommand {
             description: 'Allow people to see and join the Pubquiz. This will send the join message in #feed.',
             runIn: ['text'],
             conditions: ['ACTIVE_SESSION', 'CONTROLS_CHANNEL', 'HAS_NOT_STARTED', 'IS_NOT_OPEN'],
+            requiredPermissions: ['MANAGE_GUILD', 'VIEW_CHANNEL', 'SEND_MESSAGES', 'ADD_REACTIONS', 'MANAGE_MESSAGES', 'ATTACH_FILES', 'USE_EXTERNAL_EMOJIS', 'MANAGE_ROLES'],
             cooldown: 5,
         });
     }

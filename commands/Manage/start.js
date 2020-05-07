@@ -10,6 +10,7 @@ module.exports = class extends PubCommand {
             description: 'Close participation and start the first question.',
             runIn: ['text'],
             conditions: ['ACTIVE_SESSION', 'CONTROLS_CHANNEL', 'HAS_PARTICIPANTS', 'HAS_NOT_STARTED'],
+            requiredPermissions: ['MANAGE_GUILD', 'VIEW_CHANNEL', 'SEND_MESSAGES', 'ADD_REACTIONS', 'MANAGE_ROLES'],
             cooldown: 1,
         });
     }

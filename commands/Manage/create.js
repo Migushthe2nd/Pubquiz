@@ -25,7 +25,7 @@ module.exports = class extends PubCommand {
 			examples: ['create', 'create "Epic Pubquiz" "The biggest Pubquiz for you guys yet!" ', 'create "The best Pubquiz"'],
 			conditions: ['NO_ACTIVE_SESSION', 'IS_NOT_PARTICIPANT'],
 			runIn: ['text'],
-			requiredPermissions: ['MANAGE_GUILD', 'ADD_REACTIONS', 'VIEW_CHANNEL', 'SEND_MESSAGES', 'MANAGE_MESSAGES', 'ATTACH_FILES', 'USE_EXTERNAL_EMOJIS', 'MANAGE_ROLES'],
+			requiredPermissions: ['MANAGE_GUILD', 'VIEW_CHANNEL', 'SEND_MESSAGES', 'ADD_REACTIONS', 'MANAGE_MESSAGES', 'ATTACH_FILES', 'USE_EXTERNAL_EMOJIS', 'MANAGE_ROLES'],
 			cooldown: 10,
 
 			// args: [

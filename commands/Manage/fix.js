@@ -9,6 +9,7 @@ module.exports = class extends PubCommand {
             description: 'You might have to use this command if you removed Pubquiz-related channels manually. If you are unable to create a Pubquiz, try this. This will try to remove all Pubquiz-related channels and data.',
             runIn: ['text'],
             usage: '<confirm:boolean>',
+            requiredPermissions: ['MANAGE_GUILD', 'VIEW_CHANNEL', 'SEND_MESSAGES'],
             conditions: [],
             cooldown: 10,
 

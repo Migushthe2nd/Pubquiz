@@ -8,6 +8,7 @@ module.exports = class extends PubCommand {
             description: 'Hide the Pubquiz for non-participants.',
             runIn: ['text'],
             conditions: ['ACTIVE_SESSION', 'CONTROLS_CHANNEL'],
+            requiredPermissions: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'MANAGE_MESSAGES', 'MANAGE_ROLES'],
             cooldown: 5,
         });
     }

@@ -10,6 +10,7 @@ module.exports = class extends PubCommand {
             examples: ['spectator @member1', 'spectator @member1 @member2 @member3'],
             usage: '<member:member> [...]',
             conditions: ['ACTIVE_SESSION', 'CORRECT_GUILD'],
+            requiredPermissions: ['MANAGE_GUILD', 'VIEW_CHANNEL', 'SEND_MESSAGES', 'MANAGE_ROLES'],
             cooldown: 1,
 
             // args: [

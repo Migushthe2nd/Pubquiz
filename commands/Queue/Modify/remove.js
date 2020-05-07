@@ -11,6 +11,7 @@ module.exports = class extends PubCommand {
             examples: ['remove 5 yes'],
             usage: '<questionNr:integer> <confirm:boolean>',
             conditions: ['ACTIVE_SESSION', 'CONTROLS_CHANNEL', 'IS_ORIGINAL_CREATOR', 'HAS_NOT_STARTED', 'HAS_QUESTIONS'],
+            requiredPermissions: ['VIEW_CHANNEL', 'SEND_MESSAGES'],
             cooldown: 1,
 
             // args: [

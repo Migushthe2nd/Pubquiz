@@ -8,6 +8,7 @@ module.exports = class extends PubCommand {
             description: 'Make the Pubquiz visible in the server.',
             runIn: ['text'],
             conditions: ['ACTIVE_SESSION', 'CONTROLS_CHANNEL'],
+            requiredPermissions: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'MANAGE_MESSAGES', 'MANAGE_ROLES'],
             cooldown: 5,
         });
     }

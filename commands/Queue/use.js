@@ -12,6 +12,7 @@ module.exports = class extends PubCommand {
             examples: ['use 902fa8c6-8a23-11ea-bc55-0242ac130003'],
             usage: '<UUID:uuid>',
             conditions: ['ACTIVE_SESSION', 'CONTROLS_CHANNEL', 'HAS_NOT_STARTED'],
+            requiredPermissions: ['VIEW_CHANNEL', 'SEND_MESSAGES'],
             cooldown: 10,
 
             // args: [

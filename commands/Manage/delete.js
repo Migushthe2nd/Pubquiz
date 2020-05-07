@@ -8,6 +8,7 @@ module.exports = class extends PubCommand {
             description: 'Delete a Pubquiz by UUID. Active quizes will be stopped if forced. This will remove questions. If you wish to keep those, use the end command to end the Pubquiz. Only the original creator of the Pubquiz is able to use this command.',
             usage: '[UUID:uuid] <confirm:boolean|force>',
             examples: ['delete yes', 'delete e52cf51d-1ae1-417c-a42e-f7e096d07d21 yes'],
+            requiredPermissions: ['MANAGE_GUILD', 'VIEW_CHANNEL', 'SEND_MESSAGES'],
             conditions: [],
             cooldown: 1,
 

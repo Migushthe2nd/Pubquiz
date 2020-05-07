@@ -11,6 +11,7 @@ module.exports = class extends PubCommand {
             examples: ['edit "How many toes does a goat have?" 120 https://example.com/image.png'],
             usage: '<questionNr:integer> [question:string{,500}] [countdown:integer{,3600}] [image:image]',
             conditions: ['ACTIVE_SESSION', 'CONTROLS_CHANNEL', 'IS_ORIGINAL_CREATOR', 'HAS_NOT_STARTED', 'HAS_QUESTIONS'],
+            requiredPermissions: ['VIEW_CHANNEL', 'SEND_MESSAGES'],
             cooldown: 2,
 
             // args: [
