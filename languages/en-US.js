@@ -32,7 +32,7 @@ module.exports = class extends Language {
                 'Credits to Kaytjuh for the logo design.',
                 '',
                 `Pubquiz V${config.version}`,
-                '```'
+                '------------```'
             ],
             COMMAND_CONF_RESET: (key, response) => `The key **${key}** has been reset to: \`${response}\``
         };
