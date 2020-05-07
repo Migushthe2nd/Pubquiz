@@ -7,7 +7,7 @@ module.exports = class extends PubCommand {
             name: 'list',
             aliases: ['questions', 'queue'],
             description: 'Show all questions in the queue.',
-            runIn: 'text',
+            runIn: ['text'],
             cooldown: 2,
         });
     }
