@@ -1,5 +1,4 @@
 const PubCommand = require('../../PubCommand')
-const { db } = require('../../db')
 
 module.exports = class extends PubCommand {
     constructor(...args) {
