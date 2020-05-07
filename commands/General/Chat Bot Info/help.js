@@ -1,7 +1,8 @@
-const { Command, util: { isFunction } } = require('klasa');
+const { util: { isFunction } } = require('klasa');
+const PubCommand = require('../../../PubCommand')
 const has = (obj, key) => Object.prototype.hasOwnProperty.call(obj, key);
 
-module.exports = class extends Command {
+module.exports = class extends PubCommand {
 
 	constructor(...args) {
 		super(...args, {
@@ -24,7 +25,7 @@ module.exports = class extends Command {
 				isFunction(command.description) ? command.description(message.language) : command.description,
 				message.language.get('COMMAND_HELP_USAGE') + ' :: ' + command.usage.fullUsage(message),
 				// message.language.get('COMMAND_HELP_EXTENDED'),
-				isFunction(command.extendedHelp) ? command.extendedHelp(message.language) : `${message.language.get('COMMAND_HELP_EXAMPLES')} ::\n${command.extendedHelp}`
+				command.examples && command.examples.length > 0 ? `${message.language.get('COMMAND_HELP_EXAMPLES')} ::\n${command.examples.map(i => ` - ${i}`).join('\n')}` : ''
 			].join('\n');
 			return message.sendMessage(info, { code: 'asciidoc' });
 		}

@@ -1,13 +1,13 @@
-const { Command } = require('klasa');
+const PubCommand = require('../../PubCommand')
 const { db } = require('../../db')
 
-module.exports = class extends Command {
+module.exports = class extends PubCommand {
     constructor(...args) {
         super(...args, {
             name: 'delete',
             description: 'Delete a Pubquiz by UUID. Active quizes will be stopped if forced. This will remove questions. If you wish to keep those, use the end command to end the Pubquiz. Only the original creator of the Pubquiz is able to use this command.',
             usage: '[UUID:uuid] <confirm:boolean|force>',
-            extendedHelp: [' - delete yes', ' - delete e52cf51d-1ae1-417c-a42e-f7e096d07d21 yes'].join('\n'),
+            examples: ['delete yes', 'delete e52cf51d-1ae1-417c-a42e-f7e096d07d21 yes'],
             runIn: ['text', 'dm'],
             cooldown: 1,
 

@@ -1,8 +1,8 @@
-const { Command } = require('klasa');
+const PubCommand = require('../../PubCommand')
 const { v4 } = require('uuid');
 const { db } = require('../../db')
 
-module.exports = class extends Command {
+module.exports = class extends PubCommand {
     constructor(...args) {
         super(...args, {
             name: 'import',

@@ -1,7 +1,7 @@
-const { Command } = require('klasa');
+const PubCommand = require('../../PubCommand')
 const { db } = require('../../db')
 
-module.exports = class extends Command {
+module.exports = class extends PubCommand {
     constructor(...args) {
         super(...args, {
             name: 'list',
@@ -40,10 +40,10 @@ module.exports = class extends Command {
                                     `\n__**Question ${question.question_nr}**:__ *${question.description}*` :
                                     `\n__**Question ${question.question_nr}**__`
                                 ) + (question.question_nr < results.question_nr || (question.question_nr === results.question_nr && !results.is_active) ? ' (finished)' : (question.question_nr === results.question_nr && results.is_active) ? ' (current)' : '')
-                                + (question.countdown ? `\n**       Seconds:** ${question.countdown}` : '')
-                                + (question.points ? `\n**      Points:** ${question.points}` : '')
-                                + (question.image_url ? `\n**       Image Url:** <${question.image_url}>` : '')
-                                + (question.video_url ? `\n**       Video Url:** <${question.video_url}>` : '')
+                                + (question.countdown ? `\n**\tSeconds:** ${question.countdown}` : '')
+                                + (question.points ? `\n**\tPoints:** ${question.points}` : '')
+                                + (question.image_url ? `\n**\tImage Url:** <${question.image_url}>` : '')
+                                + (question.video_url ? `\n**\tVideo Url:** <${question.video_url}>` : '')
                         })
 
                         message.channel.send(fullString, { split: true })

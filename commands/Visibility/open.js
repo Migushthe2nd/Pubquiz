@@ -1,9 +1,9 @@
-const { Command } = require('klasa');
+const PubCommand = require('../../PubCommand')
 const { watchJoinMessage } = require('../../resume/watch_message')
 const { quizDetails } = require('../../embeds')
 const { db } = require('../../db')
 
-module.exports = class extends Command {
+module.exports = class extends PubCommand {
     constructor(...args) {
         super(...args, {
             name: 'open',

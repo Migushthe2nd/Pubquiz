@@ -1,9 +1,9 @@
-const { Command } = require('klasa');
+const PubCommand = require('../../PubCommand')
 const { startQuestionCountdown } = require('../../resume/watch_message')
 const { questionNew } = require('../../embeds')
 const { db } = require('../../db')
 
-module.exports = class extends Command {
+module.exports = class extends PubCommand {
     constructor(...args) {
         super(...args, {
             name: 'next',

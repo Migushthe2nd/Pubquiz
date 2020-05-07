@@ -1,15 +1,15 @@
-const { Command } = require('klasa');
+const PubCommand = require('../../../PubCommand')
 const { v4 } = require('uuid');
 const { db } = require('../../../db')
 
-module.exports = class extends Command {
+module.exports = class extends PubCommand {
     constructor(...args) {
         super(...args, {
             name: 'add',
             description: 'Add a new question to the queue.',
             // examples: ['add "How many toes does a goat have?" 120'],
             runIn: ['text'],
-            extendedHelp: [' - add "How many toes does a goat have?" 120', ' - add "What is 20+4?" https://example.com/image.png'].join('\n'),
+            examples: ['add "How many toes does a goat have?" 120', 'add "What is 20+4?" https://example.com/image.png'],
             usage: '<question:string{,500}> [countdown:integer{,3600}] [image:image]',
 
             // args: [

@@ -1,15 +1,15 @@
-const { Command } = require('klasa');
+const PubCommand = require('../../PubCommand')
 const { newPubquiz } = require('../../embeds')
 const { db } = require('../../db')
 
-module.exports = class extends Command {
+module.exports = class extends PubCommand {
     constructor(...args) {
         super(...args, {
             name: 'use',
             description: 'Use questions from an existing Pubquiz. The current queue will be replaced with the new one! If you wish to go back, use this command again and specify the UUID I DM\'ed you earlier.',
             // examples: ['use 902fa8c6-8a23-11ea-bc55-0242ac130003'],
             runIn: ['text'],
-            extendedHelp: [' - use 902fa8c6-8a23-11ea-bc55-0242ac130003'].join('\n'),
+            examples: ['use 902fa8c6-8a23-11ea-bc55-0242ac130003'],
             usage: '<UUID:uuid>',
             cooldown: 10,
 

@@ -1,14 +1,14 @@
-const { Command } = require('klasa');
+const PubCommand = require('../../../PubCommand')
 const { db } = require('../../../db')
 
-module.exports = class extends Command {
+module.exports = class extends PubCommand {
     constructor(...args) {
         super(...args, {
             name: 'remove',
             description: 'Remove a question from the queue.',
             // examples: ['remove 5 yes'],
             runIn: ['text'],
-            extendedHelp: [' - remove 5 yes'].join('\n'),
+            examples: ['remove 5 yes'],
             usage: '<questionNr:integer> <confirm:boolean>',
             cooldown: 1,
 
@@ -57,7 +57,7 @@ module.exports = class extends Command {
                                     AND question_nr = $2;
 
                                 UPDATE pubquiz_questions
-                                SET question_nr = question_nr - 1
+                                SET question_nr = question_nr1
                                 WHERE question_nr > $2;
                             `, [results.pubquiz_uuid, questionNr])
                             message.reply("Question **successfully removed** from the queue.")

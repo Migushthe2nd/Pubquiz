@@ -1,14 +1,14 @@
-const { Command } = require('klasa');
+const PubCommand = require('../../../PubCommand')
 const { db } = require('../../../db')
 
-module.exports = class extends Command {
+module.exports = class extends PubCommand {
     constructor(...args) {
         super(...args, {
             name: 'edit',
             description: 'Edit a question in the queue.',
             // examples: ['edit "How many toes does a goat have?" 120'],
             runIn: ['text'],
-            extendedHelp: [' - edit "How many toes does a goat have?" 120 https://example.com/image.png'].join('\n'),
+            examples: ['edit "How many toes does a goat have?" 120 https://example.com/image.png'],
             usage: '<questionNr:integer> [question:string{,500}] [countdown:integer{,3600}] [image:image]',
             cooldown: 2,
 

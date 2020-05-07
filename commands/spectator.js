@@ -1,13 +1,13 @@
-const { Command } = require('klasa');
+const PubCommand = require('../PubCommand')
 const { db } = require('../db')
 
-module.exports = class extends Command {
+module.exports = class extends PubCommand {
     constructor(...args) {
         super(...args, {
             name: 'spectator',
             description: 'Toggle spectator for a user. This will allow them to view the answers channels, unlike just keeping the Pubquiz visible.',
             runIn: ['text'],
-            extendedHelp: [' - spectator @member1', ' - spectator @member1 @member2 @member3'].join('\n'),
+            examples: ['spectator @member1', 'spectator @member1 @member2 @member3'],
             usage: '<member:member> [...]',
             cooldown: 1,
 
@@ -37,6 +37,7 @@ module.exports = class extends Command {
                 const allPromises = []
                 const categoryChannel = this.client.guilds.cache.get(guildId).channels.cache.get(results.category_channel_id);
                 members.forEach(member => {
+                    // eslint-disable-next-line no-async-promise-executor
                     const promise = new Promise(async resolve => {
                         if (results.creator_id !== member.id) {
                             if (results.participants ? !results.participants.includes(member.id) : true) {

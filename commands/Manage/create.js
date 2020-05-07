@@ -1,4 +1,5 @@
-const { Command, util: { isFunction } } = require('klasa');
+const { util: { isFunction } } = require('klasa');
+const PubCommand = require('../../PubCommand')
 const { newPubquiz } = require('../../embeds')
 const { v4 } = require('uuid');
 const { db } = require('../../db')
@@ -15,13 +16,13 @@ function generatePassword (length) {
 	return result;
 }
 
-module.exports = class extends Command {
+module.exports = class extends PubCommand {
 	constructor(...args) {
 		super(...args, {
 			name: 'create',
 			description: 'Create a new Pubquiz. Do `help create` to view all parameters.',
 			usage: '[title:string{,50}] [description:string{,50}] [image:image]',
-			extendedHelp: [' - create', ' - create "Epic Pubquiz" "The biggest Pubquiz for you guys yet!" ', ' - create "The best Pubquiz"'].join('\n'),
+			examples: ['create', 'create "Epic Pubquiz" "The biggest Pubquiz for you guys yet!" ', 'create "The best Pubquiz"'].join('\n'),
 			runIn: ['text'],
 			cooldown: 10,
 
@@ -238,8 +239,8 @@ module.exports = class extends Command {
 					if (!has(help[command.category], command.subCategory)) help[command.category][command.subCategory] = [];
 					const description = isFunction(command.description) ? command.description(message.language) : command.description;
 					help[command.category][command.subCategory].push(`${command.name.padEnd(longest)} :: ${description}`);
-					if (command.usage && command.usage.usageString) help[command.category][command.subCategory].push(`	${message.language.get('COMMAND_HELP_USAGE')}: ${command.usage.nearlyFullUsage}`)
-					if (!isFunction(command.extendedHelp)) help[command.category][command.subCategory].push(`	${message.language.get('COMMAND_HELP_EXAMPLES')}:`, command.extendedHelp.split('\n').map(i => `	${i}`).join('\n'))
+					if (command.usage && command.usage.usageString) help[command.category][command.subCategory].push(`\t${message.language.get('COMMAND_HELP_USAGE')}: ${command.usage.nearlyFullUsage}`)
+					if (command.examples && command.examples.length > 0) help[command.category][command.subCategory].push(`\t${message.language.get('COMMAND_HELP_EXAMPLES')}: \n${command.examples.map(i => `\t - ${i}`).join('\n')}`)
 				})
 				.catch(() => {
 					// noop
