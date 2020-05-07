@@ -6,6 +6,7 @@ module.exports = class extends PubCommand {
         super(...args, {
             name: 'edit',
             description: 'Edit a question in the queue.',
+            aliases: ['modify'],
             // examples: ['edit "How many toes does a goat have?" 120'],
             runIn: ['text'],
             examples: ['edit "How many toes does a goat have?" 120 https://example.com/image.png'],
