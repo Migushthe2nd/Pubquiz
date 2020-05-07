@@ -10,7 +10,7 @@ module.exports = class extends PubCommand {
             // examples: ['add "How many toes does a goat have?" 120'],
             runIn: ['text'],
             examples: ['add "How many toes does a goat have?" 120', 'add "What is 20+4?" https://example.com/image.png'],
-            usage: '<question:string{,500}> [countdown:integer{,3600}] [image:image]',
+            usage: '[question:string{,500}] [countdown:integer{,3600}] [image:image]',
             conditions: ['ACTIVE_SESSION', 'CONTROLS_CHANNEL', 'IS_ORIGINAL_CREATOR']
 
             // args: [

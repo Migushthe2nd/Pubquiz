@@ -92,20 +92,18 @@ module.exports = class extends Inhibitor {
         });
     }
 
-
-
     async run (message, command) {
         if (message.command.name === command.name) {
-            const guildId = message.channel.guild.id
-            const channelId = message.channel.id
-            const authorId = message.author.id
-
-            session = undefined
-            pubquiz = undefined
-            questions = undefined
-            participation = undefined
-
             if (command.conditions && command.conditions.length > 0) {
+                const guildId = message.channel.guild.id
+                const channelId = message.channel.id
+                const authorId = message.author.id
+
+                session = undefined
+                pubquiz = undefined
+                questions = undefined
+                participation = undefined
+
                 try {
                     message.resolved = {}
                     for (const i in command.conditions) {

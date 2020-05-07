@@ -21,7 +21,7 @@ module.exports = class extends PubCommand {
 		super(...args, {
 			name: 'create',
 			description: 'Create a new Pubquiz. Do `help create` to view all parameters.',
-			usage: '<title:string{,50}> [description:string{,50}] [image:image]',
+			usage: '[title:string{,50}] [description:string{,50}] [image:image]',
 			examples: ['create', 'create "Epic Pubquiz" "The biggest Pubquiz for you guys yet!" ', 'create "The best Pubquiz"'],
 			conditions: ['NO_ACTIVE_SESSION', 'IS_NOT_PARTICIPANT'],
 			runIn: ['text'],
