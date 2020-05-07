@@ -7,6 +7,7 @@ module.exports = class extends Command {
             name: 'hide',
             description: 'Hide the Pubquiz for non-participants.',
             runIn: ['text'],
+            cooldown: 5,
         });
     }
 

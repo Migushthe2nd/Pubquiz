@@ -10,6 +10,7 @@ module.exports = class extends Command {
             runIn: ['text'],
             extendedHelp: [' - remove 5 yes'].join('\n'),
             usage: '<questionNr:integer> <confirm:boolean>',
+            cooldown: 1,
 
             // args: [
             //     {

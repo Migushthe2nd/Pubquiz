@@ -7,7 +7,8 @@ module.exports = class extends Command {
             name: 'spectator',
             description: 'Toggle spectator for a user. This will allow them to view the answers channels, unlike just keeping the Pubquiz visible.',
             runIn: ['text'],
-            usage: '<member:member>',
+            usage: '<member:member> [...]',
+            cooldown: 1,
 
             // args: [
             //     {

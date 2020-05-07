@@ -8,6 +8,7 @@ module.exports = class extends Command {
             description: 'Remove all questions from the queue.',
             runIn: ['text'],
             usage: '<confirm:boolean>',
+            cooldown: 10,
 
             // args: [
             //     {

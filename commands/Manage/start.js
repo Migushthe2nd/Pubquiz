@@ -9,6 +9,7 @@ module.exports = class extends Command {
             name: 'start',
             description: 'Close participation and start the first question.',
             runIn: ['text'],
+            cooldown: 1,
         });
     }
 

@@ -9,6 +9,7 @@ module.exports = class extends Command {
             name: 'next',
             description: 'Start the next question.',
             runIn: ['text'],
+            cooldown: 10
         });
     }
 

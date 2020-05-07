@@ -16,6 +16,7 @@ module.exports = class extends Language {
             COMMAND_HELP_EXAMPLES: 'Examples',
             COMMAND_HELP_USAGE: 'Usage',
             COMMAND_INFO: [
+                '```asciidoc',
                 'Pubquiz is a bot which can help organise pubquizes in Discord servers.',
                 'Configured quizes are stored in a database and can be used multiple times by anyone if the creator shares the UUID.',
                 '',
@@ -30,7 +31,8 @@ module.exports = class extends Language {
                 '',
                 'Credits to Kaytjuh for the logo design.',
                 '',
-                `Pubquiz V${config.version}`
+                `Pubquiz V${config.version}`,
+                '```'
             ],
             COMMAND_CONF_RESET: (key, response) => `The key **${key}** has been reset to: \`${response}\``
         };

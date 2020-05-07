@@ -9,6 +9,7 @@ module.exports = class extends Command {
             name: 'open',
             description: 'Allow people to see and join the Pubquiz. This will send the join message in #feed.',
             runIn: ['text'],
+            cooldown: 5,
         });
     }
 

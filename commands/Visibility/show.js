@@ -7,6 +7,7 @@ module.exports = class extends Command {
             name: 'show',
             description: 'Make the Pubquiz visible in the server.',
             runIn: 'text',
+            cooldown: 5,
         });
     }
 

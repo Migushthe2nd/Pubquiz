@@ -8,6 +8,7 @@ module.exports = class extends Command {
             description: 'Stop the quiz and remove all Pubquiz-related channels.',
             runIn: ['text'],
             usage: '<confirm:boolean>',
+            cooldown: 1,
 
             // args: [
             //     {

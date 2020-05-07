@@ -10,7 +10,8 @@ module.exports = class extends Command {
             // examples: ['add "How many toes does a goat have?" 120'],
             runIn: ['text'],
             usage: '<spreadsheet:file>',
-            enabled: false
+            enabled: false,
+            cooldown: 10,
 
             // args: [
             //     {

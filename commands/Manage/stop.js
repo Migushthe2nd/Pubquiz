@@ -10,6 +10,7 @@ module.exports = class extends Command {
             description: 'Stop the quiz. This will lock the answers channels and end the question.',
             runIn: ['text'],
             usage: '<confirm:boolean>',
+            cooldown: 1,
 
             // args: [
             //     {

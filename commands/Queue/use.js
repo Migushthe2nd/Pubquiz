@@ -11,6 +11,7 @@ module.exports = class extends Command {
             runIn: ['text'],
             extendedHelp: [' - use 902fa8c6-8a23-11ea-bc55-0242ac130003'].join('\n'),
             usage: '<UUID:uuid>',
+            cooldown: 10,
 
             // args: [
             //     {

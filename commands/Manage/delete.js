@@ -9,6 +9,7 @@ module.exports = class extends Command {
             usage: '[UUID:uuid] <confirm:boolean|force>',
             extendedHelp: [' - delete yes', ' - delete e52cf51d-1ae1-417c-a42e-f7e096d07d21 yes'].join('\n'),
             runIn: ['text', 'dm'],
+            cooldown: 1,
 
             // args: [
             //     {

@@ -8,7 +8,8 @@ module.exports = class extends Command {
             name: 'close',
             runIn: ['text'],
             description: 'Close participation.',
-            promptLimit: true
+            promptLimit: true,
+            cooldown: 5,
         });
     }
 

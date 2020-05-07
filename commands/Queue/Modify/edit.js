@@ -10,6 +10,7 @@ module.exports = class extends Command {
             runIn: ['text'],
             extendedHelp: [' - edit "How many toes does a goat have?" 120 https://example.com/image.png'].join('\n'),
             usage: '<questionNr:integer> [question:string{,500}] [countdown:integer{,3600}] [image:image]',
+            cooldown: 2,
 
             // args: [
             //     {

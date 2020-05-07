@@ -8,7 +8,8 @@ module.exports = class extends Command {
             runIn: ['text'],
             description: 'Remove all messages in #feed or #controls depending on where you use it. Does not remove the join and help messages.',
             usage: '<confirm:boolean>',
-            promptLimit: true
+            promptLimit: true,
+            cooldown: 5,
 
             // args: [
             //     {

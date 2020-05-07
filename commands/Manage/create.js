@@ -23,6 +23,7 @@ module.exports = class extends Command {
 			usage: '[title:string{,50}] [description:string{,50}] [image:image]',
 			extendedHelp: [' - create', ' - create "Epic Pubquiz" "The biggest Pubquiz for you guys yet!" ', ' - create "The best Pubquiz"'].join('\n'),
 			runIn: ['text'],
+			cooldown: 10,
 
 			// args: [
 			// 	{

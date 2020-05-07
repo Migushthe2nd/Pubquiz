@@ -8,6 +8,7 @@ module.exports = class extends Command {
             aliases: ['questions', 'queue'],
             description: 'Show all questions in the queue.',
             runIn: 'text',
+            cooldown: 2,
         });
     }
 
