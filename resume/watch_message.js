@@ -1,8 +1,8 @@
 const Discord = require("discord.js");
+const { question_update_interval } = require('../config.json')
 const { quizDetails, questionNew, answerDividerAbove } = require('../embeds')
 const { db } = require('../db')
-
-const question_update_interval = 10000
+// const _ = require('lodash');
 
 let joinMessage = null
 let participantsCollector = null
@@ -25,7 +25,7 @@ exports.watchJoinMessage = (message, { sessionUuid, creator, categoryChannel, db
             message.embeds.length > 0 ? message.embeds[0].description : null,
             creator,
             participants,
-            50 - joinMessage.channel.parent.children.size - (joined ? 1 : 0),
+            50 - message.channel.parent.children.size - (joined ? 1 : 0),
             openedTime,
             message.embeds.length > 0 ? message.embeds[0].thumbnail ? message.embeds[0].thumbnail.url : null : null,
             false
@@ -34,10 +34,10 @@ exports.watchJoinMessage = (message, { sessionUuid, creator, categoryChannel, db
 
     participantsCollector.on('collect', async (reaction, user) => {
         const results = await db.oneOrNone(`
-            SELECT participants, spectators
-            FROM pubquiz_sessions
-            WHERE session_uuid = $2;
-        `, [user.id, sessionUuid])
+                SELECT participants, spectators
+                FROM pubquiz_sessions
+                WHERE session_uuid = $2;
+            `, [user.id, sessionUuid])
 
         if (results && (results.participants ? !results.participants.includes(user.id) : true)) {
             if (results.spectators ? !results.spectators.includes(user.id) : true) {

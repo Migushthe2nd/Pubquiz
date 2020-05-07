@@ -63,18 +63,10 @@ exports.quizDetails = (title, description, creator, participants, placesLeft, op
 
         for (let f = 0; f < participantsStrings.length; f++) {
             if (f === participantsStrings.length - 1 && andMore) {
-                if (!closed)
-                    embed.addField(`Participants (${participants.length} - ${placesLeft > 0 ? placesLeft : 0} left)`, participantsStrings[f] + '\nAnd more...')
-                else {
-                    embed.addField(`Participants (${participants.length} - ${placesLeft > 0 ? placesLeft : 0} left)`, participantsStrings[f] + '\nAnd more...')
-                }
+                embed.addField(`Participants (${participants.length}, ${placesLeft > 0 ? placesLeft : 0} slots left)`, participantsStrings[f] + '\nAnd more...')
                 break;
             } else if (participantsStrings[f] !== '') {
-                if (!closed)
-                    embed.addField(`Participants (${participants.length} - ${placesLeft > 0 ? placesLeft : 0} left)`, participantsStrings[f])
-                else {
-                    embed.addField(`Participants (${participants.length} - ${placesLeft > 0 ? placesLeft : 0} left)`, participantsStrings[f])
-                }
+                embed.addField(`Participants (${participants.length}, ${placesLeft > 0 ? placesLeft : 0} slots left)`, participantsStrings[f])
             }
         }
     }

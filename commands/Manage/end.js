@@ -8,6 +8,7 @@ module.exports = class extends PubCommand {
             description: 'Stop the quiz and remove all Pubquiz-related channels.',
             runIn: ['text'],
             usage: '<confirm:boolean>',
+            conditions: ['ACTIVE_SESSION', 'CONTROLS_CHANNEL'],
             cooldown: 1,
 
             // args: [
@@ -23,47 +24,31 @@ module.exports = class extends PubCommand {
 
     async run (message, [confirm]) {
         if (confirm) {
-            const creatorId = message.author.id
-            const channelId = message.channel.id
             const guildId = message.channel.guild.id
 
-            const results = await db.oneOrNone(`
-                    SELECT guild_id, category_channel_id, controls_channel_id, session_uuid
-                    FROM pubquiz_sessions
-                    WHERE creator_id = $1;
-                `, [creatorId])
+            try {
+                const categoryChannel = await this.client.guilds.cache.get(guildId).channels.cache.get(message.resolved.session.category_channel_id);
+                if (categoryChannel) {
+                    await categoryChannel.children.forEach(channel => channel.delete())
+                    setTimeout(() => {
+                        categoryChannel.delete();
+                    }, 200)
+                    db.none(`
+                        -- DELETE FROM pubquiz_scores
+                        -- WHERE session_uuid = $1;
 
-            if (results) {
-                if (results.guild_id === guildId && results.controls_channel_id === channelId) {
-                    try {
-                        const categoryChannel = await this.client.guilds.cache.get(guildId).channels.cache.get(results.category_channel_id);
-                        if (results.guild_id === guildId && categoryChannel) {
-                            await categoryChannel.children.forEach(channel => channel.delete())
-                            setTimeout(() => {
-                                categoryChannel.delete();
-                            }, 200)
-                            db.none(`
-                                -- DELETE FROM pubquiz_scores
-                                -- WHERE session_uuid = $1;
-
-                                DELETE FROM pubquiz_participants
-                                WHERE session_uuid = $1;
-                
-                                DELETE FROM pubquiz_sessions
-                                WHERE session_uuid = $1;
-                            `, [results.session_uuid])
-                        } else {
-                            message.reply("The category has **already been removed** :/")
-                        }
-                    } catch (e) {
-                        console.log(e)
-                        message.reply("Something **went wrong** while trying to end the Pubquiz :/")
-                    }
+                        DELETE FROM pubquiz_participants
+                        WHERE session_uuid = $1;
+        
+                        DELETE FROM pubquiz_sessions
+                        WHERE session_uuid = $1;
+                    `, [message.resolved.session.session_uuid])
                 } else {
-                    message.reply(`You must use this command in ${this.client.guilds.cache.get(results.guild_id).channels.cache.get(results.controls_channel_id)}.`)
+                    message.reply("The category has **already been removed** :/")
                 }
-            } else {
-                message.reply("You **haven't started** a Pubquiz yet.")
+            } catch (e) {
+                console.log(e)
+                message.reply("Something **went wrong** while trying to end the Pubquiz :/")
             }
         }
     }

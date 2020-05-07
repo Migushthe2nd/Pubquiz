@@ -10,6 +10,7 @@ module.exports = class extends PubCommand {
             // examples: ['add "How many toes does a goat have?" 120'],
             runIn: ['text'],
             usage: '<spreadsheet:file>',
+            conditions: ['ACTIVE_SESSION', 'CONTROLS_CHANNEL'],
             enabled: false,
             cooldown: 10,
 

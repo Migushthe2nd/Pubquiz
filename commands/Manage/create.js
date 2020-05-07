@@ -21,8 +21,9 @@ module.exports = class extends PubCommand {
 		super(...args, {
 			name: 'create',
 			description: 'Create a new Pubquiz. Do `help create` to view all parameters.',
-			usage: '[title:string{,50}] [description:string{,50}] [image:image]',
+			usage: '<title:string{,50}> [description:string{,50}] [image:image]',
 			examples: ['create', 'create "Epic Pubquiz" "The biggest Pubquiz for you guys yet!" ', 'create "The best Pubquiz"'],
+			conditions: ['NO_ACTIVE_SESSION', 'IS_NOT_PARTICIPANT'],
 			runIn: ['text'],
 			cooldown: 10,
 
@@ -55,131 +56,112 @@ module.exports = class extends PubCommand {
 		const creatorName = message.author.username
 		const guildId = message.channel.guild.id
 
-		const isCreator = await db.oneOrNone(`
-                SELECT guild_id, controls_channel_id
-                FROM pubquiz_sessions
-                WHERE creator_id = $1;
-            `, [creatorId])
+		let categoryChannel = null
+		let feedChannel = null
+		let controlsChannel = null
+		try {
+			// const quizmasterrole = await message.guild.roles.create({
+			//     data: {
+			//         name: 'Pubquiz Master',
+			//         color: 'BLUE',
+			//         permissions: [
+			//             'MANAGE_MESSAGES',
+			//             'KICK_MEMBERS'
+			//         ]
+			//     },
+			//     reason: 'Pubquiz gestart',
+			// })
+			// await message.member.roles.add(quizmasterrole);
 
-		const isparticipant = await db.oneOrNone(`
-                SELECT pubquiz_sessions.guild_id, pubquiz_sessions.feed_channel_id
-                FROM pubquiz_participants
-                INNER JOIN pubquiz_sessions
-                ON pubquiz_participants.session_uuid = pubquiz_sessions.session_uuid
-                WHERE participant_id = $1;
-            `, [creatorId])
+			categoryChannel = await message.guild.channels.create(title ? title : `${creatorName}'s Pubquiz`, {
+				type: 'category',
+				permissionOverwrites: [
+					{
+						id: message.guild.id,
+						deny: ['VIEW_CHANNEL'],
+					},
+					{
+						id: creatorId,
+						allow: ['VIEW_CHANNEL'],
+					}
+				],
+			})
+			await categoryChannel.setPosition(0)
 
-		if (isCreator) {
-			message.reply(`You have **already created** a Pubquiz here: ${this.client.guilds.cache.get(isCreator.guild_id).channels.cache.get(isCreator.controls_channel_id)}. There can only be one created Pubquiz per user.`)
-		} else if (isparticipant) {
-			message.reply(`You are **already participating** in a Pubquiz here: ${this.client.guilds.cache.get(isparticipant.guild_id).channels.cache.get(isparticipant.feed_channel_id)}`)
-		} else {
-			let categoryChannel = null
-			let feedChannel = null
-			let controlsChannel = null
-			try {
-				// const quizmasterrole = await message.guild.roles.create({
-				//     data: {
-				//         name: 'Pubquiz Master',
-				//         color: 'BLUE',
-				//         permissions: [
-				//             'MANAGE_MESSAGES',
-				//             'KICK_MEMBERS'
-				//         ]
-				//     },
-				//     reason: 'Pubquiz gestart',
-				// })
-				// await message.member.roles.add(quizmasterrole);
-
-				categoryChannel = await message.guild.channels.create(title ? title : `${creatorName}'s Pubquiz`, {
-					type: 'category',
-					permissionOverwrites: [
-						{
-							id: message.guild.id,
-							deny: ['VIEW_CHANNEL'],
-						},
-						{
-							id: creatorId,
-							allow: ['VIEW_CHANNEL'],
-						}
-					],
-				})
-				await categoryChannel.setPosition(0)
-
-				await Promise.all([
-					new Promise((resolve) => {
-						message.guild.channels.create(`feed`, {
-							type: 'text',
-							permissionOverwrites: [
-								{
-									id: message.guild.id,
-									allow: ['ADD_REACTIONS'],
-									deny: ['VIEW_CHANNEL', 'SEND_MESSAGES'],
-								},
-								{
-									id: creatorId,
-									allow: ['VIEW_CHANNEL', 'SEND_MESSAGES'],
-								}
-							],
-						}).then(createdChannel => {
-							feedChannel = createdChannel
-							feedChannel.setParent(categoryChannel.id)
-							feedChannel.createOverwrite(guildId, {
-								VIEW_CHANNEL: false,
-								SEND_MESSAGES: false
-							})
-							resolve()
+			await Promise.all([
+				new Promise((resolve) => {
+					message.guild.channels.create(`feed`, {
+						type: 'text',
+						permissionOverwrites: [
+							{
+								id: message.guild.id,
+								allow: ['ADD_REACTIONS'],
+								deny: ['VIEW_CHANNEL', 'SEND_MESSAGES'],
+							},
+							{
+								id: creatorId,
+								allow: ['VIEW_CHANNEL', 'SEND_MESSAGES'],
+							}
+						],
+					}).then(createdChannel => {
+						feedChannel = createdChannel
+						feedChannel.setParent(categoryChannel.id)
+						feedChannel.createOverwrite(guildId, {
+							VIEW_CHANNEL: false,
+							SEND_MESSAGES: false
 						})
-					}),
-					new Promise((resolve) => {
-						message.guild.channels.create(`controls`, {
-							type: 'text',
-							permissionOverwrites: [
-								{
-									id: message.guild.id,
-									deny: ['VIEW_CHANNEL'],
-								},
-								{
-									id: creatorId,
-									allow: ['VIEW_CHANNEL'],
-								}
-							],
-						}).then(createdChannel => {
-							controlsChannel = createdChannel
-							controlsChannel.setParent(categoryChannel.id)
-							resolve()
-						})
+						resolve()
 					})
-				])
-
-
-
-				// // Send instrunctions for controls
-				const help = await this.buildHelp(message)
-
-				const categories = Object.keys(help);
-				const { prefix } = message.guildSettings;
-				const helpMessage = [];
-
-				helpMessage.push(`**Prefix` + (message.guild !== null ? ` in ${message.guild.name}` : '') + `: \`${prefix}\`**`)
-				for (let cat = 0; cat < categories.length; cat++) {
-					helpMessage.push('\u200b');
-					helpMessage.push(`**${categories[cat]} Commands**:`, '```asciidoc');
-					const subCategories = Object.keys(help[categories[cat]]);
-					for (let subCat = 0; subCat < subCategories.length; subCat++) helpMessage.push(`= ${subCategories[subCat]} =`, `${help[categories[cat]][subCategories[subCat]].join('\n')}\n`);
-					helpMessage.push('```');
-				}
-				helpMessage.push('An example command order: `add` (add questions), `open` (allow people to join), `start` (close participartation and start the first question), `next` (next question), `end` (end the Pubquiz)')
-
-				const helpMessages = await controlsChannel.send(helpMessage, { split: { char: '\u200b' } })
-
-				const helpMessageIds = []
-				helpMessages.forEach(message => {
-					/* global BigInt */
-					helpMessageIds.push(BigInt(message.id))
+				}),
+				new Promise((resolve) => {
+					message.guild.channels.create(`controls`, {
+						type: 'text',
+						permissionOverwrites: [
+							{
+								id: message.guild.id,
+								deny: ['VIEW_CHANNEL'],
+							},
+							{
+								id: creatorId,
+								allow: ['VIEW_CHANNEL'],
+							}
+						],
+					}).then(createdChannel => {
+						controlsChannel = createdChannel
+						controlsChannel.setParent(categoryChannel.id)
+						resolve()
+					})
 				})
+			])
 
-				const pubquizData = await db.one(`
+
+
+			// // Send instrunctions for controls
+			const help = await this.buildHelp(message)
+
+			const categories = Object.keys(help);
+			const { prefix } = message.guildSettings;
+			const helpMessage = [];
+
+			helpMessage.push(`**Prefix` + (message.guild !== null ? ` in ${message.guild.name}` : '') + `: \`${prefix}\`**`)
+			for (let cat = 0; cat < categories.length; cat++) {
+				helpMessage.push('\u200b');
+				helpMessage.push(`**${categories[cat]} Commands**:`, '```asciidoc');
+				const subCategories = Object.keys(help[categories[cat]]);
+				for (let subCat = 0; subCat < subCategories.length; subCat++) helpMessage.push(`= ${subCategories[subCat]} =`, `${help[categories[cat]][subCategories[subCat]].join('\n')}\n`);
+				helpMessage.push('```');
+			}
+			helpMessage.push('An example command order: `add` (add questions), `open` (allow people to join), `start` (close participartation and start the first question), `next` (next question), `end` (end the Pubquiz)')
+
+			const helpMessages = await controlsChannel.send(helpMessage, { split: { char: '\u200b' } })
+
+			const helpMessageIds = []
+			helpMessages.forEach(message => {
+				/* global BigInt */
+				helpMessageIds.push(BigInt(message.id))
+			})
+
+			const pubquizData = await db.one(`
 					INSERT INTO pubquiz (pubquiz_uuid, pubquiz_password, creator_id, creator_name, creator_avatarurl, title, description, image_url, created_time)
                     VALUES ($1, $2, $4, $12, $13, $10, $11, $14, NOW());
 					
@@ -190,26 +172,26 @@ module.exports = class extends PubCommand {
 					FROM pubquiz
 					WHERE pubquiz_uuid = $1;
                 `,
-					[v4(), generatePassword(8), v4(), creatorId, guildId, categoryChannel.id, feedChannel.id, controlsChannel.id, helpMessageIds, title ? title : null, description ? description : null, creatorName, message.author.avatarURL({ dynamic: true, size: 32 }), image ? image : null]
-				)
+				[v4(), generatePassword(8), v4(), creatorId, guildId, categoryChannel.id, feedChannel.id, controlsChannel.id, helpMessageIds, title ? title : null, description ? description : null, creatorName, message.author.avatarURL({ dynamic: true, size: 32 }), image ? image : null]
+			)
 
-				message.reply("The Pubquiz was **created successfully**.")
-				message.author.send({
-					content: '**Your Pubquiz details:**',
-					embed: newPubquiz(creatorName, pubquizData.creator_avatarurl, pubquizData.title, pubquizData.description, null, pubquizData.pubquiz_uuid, pubquizData.pubquiz_password, pubquizData.image_url)
-				})
-				// message.author.send(`**Your Pubquiz details:**
-				// \`\`\`UUID: ${pubquizData.pubquiz_uuid}\nPassword: ${pubquizData.pubquiz_password}\`\`\`\nYou may share the UUID with others so that they can also use your Pubquiz. They will need to make a copy before they can edit the queue. \nUsing the password you can edit the Pubquiz either in Discord or onine (in the future).\nPubquizes without questions will be removed after 7 days.
-				// `)
-			} catch (e) {
-				console.log(e)
-				feedChannel.delete()
-				controlsChannel.delete()
-				await categoryChannel.children.forEach(channel => channel.delete());
-				setTimeout(() => {
-					categoryChannel.delete();
-				}, 200)
-				db.none(`
+			message.reply("The Pubquiz was **created successfully**.")
+			message.author.send({
+				content: '**Your Pubquiz details:**',
+				embed: newPubquiz(creatorName, pubquizData.creator_avatarurl, pubquizData.title, pubquizData.description, null, pubquizData.pubquiz_uuid, pubquizData.pubquiz_password, pubquizData.image_url)
+			})
+			// message.author.send(`**Your Pubquiz details:**
+			// \`\`\`UUID: ${pubquizData.pubquiz_uuid}\nPassword: ${pubquizData.pubquiz_password}\`\`\`\nYou may share the UUID with others so that they can also use your Pubquiz. They will need to make a copy before they can edit the queue. \nUsing the password you can edit the Pubquiz either in Discord or onine (in the future).\nPubquizes without questions will be removed after 7 days.
+			// `)
+		} catch (e) {
+			console.log(e)
+			feedChannel.delete()
+			controlsChannel.delete()
+			await categoryChannel.children.forEach(channel => channel.delete());
+			setTimeout(() => {
+				categoryChannel.delete();
+			}, 200)
+			db.none(`
 					DELETE FROM pubquiz_participants
 					WHERE session_uuid = (
 						SELECT session_uuid
@@ -220,8 +202,7 @@ module.exports = class extends PubCommand {
 					DELETE FROM pubquiz_sessions
 					WHERE creator_id = $1;
 				`, [creatorId])
-				message.reply("Something **went wrong** while trying to create a Pubquiz :/")
-			}
+			message.reply("Something **went wrong** while trying to create a Pubquiz :/")
 		}
 	}
 

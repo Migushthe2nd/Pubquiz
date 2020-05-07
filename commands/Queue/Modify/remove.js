@@ -10,6 +10,7 @@ module.exports = class extends PubCommand {
             runIn: ['text'],
             examples: ['remove 5 yes'],
             usage: '<questionNr:integer> <confirm:boolean>',
+            conditions: ['ACTIVE_SESSION', 'CONTROLS_CHANNEL', 'IS_ORIGINAL_CREATOR', 'HAS_NOT_STARTED', 'HAS_QUESTIONS'],
             cooldown: 1,
 
             // args: [
@@ -31,49 +32,31 @@ module.exports = class extends PubCommand {
 
     async run (message, [questionNr, confirm]) {
         if (confirm) {
-            const creatorId = message.author.id
-            const guildId = message.channel.guild.id
-            const channelId = message.channel.id
-
-            const results = await db.oneOrNone(`
-                SELECT *
-                FROM pubquiz_sessions
-                WHERE creator_id = $1
-            `, [creatorId])
-
-            if (results) {
-                if (results.guild_id === guildId && results.controls_channel_id === channelId) {
-                    const pubquiz = await db.oneOrNone(`
-                        SELECT *
-                        FROM pubquiz
+            const doesExist = await db.oneOrNone(`
+                SELECT 1
+                FROM pubquiz_questions
+                WHERE pubquiz_uuid = $1
+                    AND question_nr = $2;
+            `, [message.resolved.pubquiz.pubquiz_uuid, questionNr])
+            if (doesExist) {
+                try {
+                    db.none(`
+                        DELETE FROM pubquiz_questions
                         WHERE pubquiz_uuid = $1
-                            AND creator_id = $2
-                    `, [results.pubquiz_uuid, creatorId])
-                    if (results.creator_id === pubquiz.creator_id) {
-                        try {
-                            db.none(`
-                                DELETE FROM pubquiz_questions
-                                WHERE pubquiz_uuid = $1
-                                    AND question_nr = $2;
+                            AND question_nr = $2;
 
-                                UPDATE pubquiz_questions
-                                SET question_nr = question_nr1
-                                WHERE question_nr > $2;
-                            `, [results.pubquiz_uuid, questionNr])
-                            message.reply("Question **successfully removed** from the queue.")
-                        } catch (e) {
-                            console.log(e)
-                            message.reply("Something **went wrong** while trying to remove the question :/")
-                        }
-                    } else {
-                        message.reply("You are **not the original creator** of this pubquiz, so you cannot modify the questions. You may use the copy command to enable editing.")
-                    }
-                } else {
-                    message.reply(`You must use this command in ${this.client.guilds.cache.get(results.guild_id).channels.cache.get(results.controls_channel_id)}.`)
+                        UPDATE pubquiz_questions
+                        SET question_nr = question_nr1
+                        WHERE question_nr > $2;
+                    `, [message.resolved.pubquiz.pubquiz_uuid, questionNr])
+                    message.reply("Question **successfully removed** from the queue.")
+                } catch (e) {
+                    console.log(e)
+                    message.reply("Something **went wrong** while trying to remove the question :/")
                 }
-            } else {
-                message.reply("You **haven't created** a Pubquiz yet.")
             }
+        } else {
+            message.reply(`Question ${questionNr} **does not exist**.`)
         }
     }
 }

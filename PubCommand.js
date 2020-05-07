@@ -2,12 +2,12 @@ const { Command } = require('klasa');
 
 module.exports = class PubCommand extends Command {
     constructor(client, store, file, core, {
-        requires = [],
+        conditions = [],
         examples = [],
         ...options
     }) {
         super(client, store, file, core, options);
         this.examples = examples
-        this.requires = requires;
+        this.conditions = conditions;
     }
 };
