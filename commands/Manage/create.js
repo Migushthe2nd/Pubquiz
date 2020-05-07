@@ -25,6 +25,7 @@ module.exports = class extends PubCommand {
 			examples: ['create', 'create "Epic Pubquiz" "The biggest Pubquiz for you guys yet!" ', 'create "The best Pubquiz"'],
 			conditions: ['NO_ACTIVE_SESSION', 'IS_NOT_PARTICIPANT'],
 			runIn: ['text'],
+			requiredPermissions: ['MANAGE_GUILD', 'ADD_REACTIONS', 'VIEW_CHANNEL', 'SEND_MESSAGES', 'MANAGE_MESSAGES', 'ATTACH_FILES', 'USE_EXTERNAL_EMOJIS', 'MANAGE_ROLES'],
 			cooldown: 10,
 
 			// args: [
@@ -185,12 +186,15 @@ module.exports = class extends PubCommand {
 			// `)
 		} catch (e) {
 			console.log(e)
-			feedChannel.delete()
-			controlsChannel.delete()
-			await categoryChannel.children.forEach(channel => channel.delete());
-			setTimeout(() => {
-				categoryChannel.delete();
-			}, 200)
+			if (feedChannel) feedChannel.delete()
+			if (controlsChannel) controlsChannel.delete()
+			if (categoryChannel) {
+				await categoryChannel.children.forEach(channel => channel.delete());
+				setTimeout(() => {
+					categoryChannel.delete();
+				}, 200)
+			}
+
 			db.none(`
 					DELETE FROM pubquiz_participants
 					WHERE session_uuid = (

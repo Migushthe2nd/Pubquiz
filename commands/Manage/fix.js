@@ -56,7 +56,7 @@ module.exports = class extends PubCommand {
                     })
                     message.reply("You should be able to create a Pubquiz now.")
                 } else {
-                    message.reply("There didn't seem to be a leftover session.")
+                    message.reply("There didn't seem to be leftover session data.")
                 }
             } catch (e) {
                 console.log(e)
