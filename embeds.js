@@ -163,7 +163,7 @@ exports.newPubquiz = (creatorName, creatorAvatarURL, title, description, questio
         embed.addField(`Password`, `\`${password}\``)
 
     if (uuid || password)
-        embed.addField('\u200B', 'You may share the UUID with others so that they can also use your Pubquiz. They will need to make a copy before they can edit it. \nUsing the password you can edit the Pubquiz either in Discord or onine (in the future).\nPubquizes without questions will be removed after 7 days.')
+        embed.addField('\u200B', 'You may share the UUID with others so that they can also use your Pubquiz. They will need to make a copy before they can edit it. \nUsing the password you or others may be able to edit the Pubquiz online in the future.\nPubquizes without questions will be removed after 7 days.')
 
     return embed
 }
