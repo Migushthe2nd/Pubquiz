@@ -29,18 +29,21 @@ module.exports = class extends PubCommand {
     }
 
     async run (message, [UUID, confirm]) {
-        const creatorId = message.author.id
-
-        const creatorSession = await db.oneOrNone(`
-            SELECT session_uuid, pubquiz_uuid, guild_id, feed_channel_id, category_channel_id
-            FROM pubquiz_sessions
-            WHERE creator_id = $1;
-        `, [creatorId])
-
-        if (!UUID)
-            UUID = creatorSession.pubquiz_uuid
-
         if (confirm) {
+            const creatorId = message.author.id
+
+            const creatorSession = await db.oneOrNone(`
+                SELECT session_uuid, pubquiz_uuid, guild_id, feed_channel_id, category_channel_id
+                FROM pubquiz_sessions
+                WHERE creator_id = $1;
+            `, [creatorId])
+
+            if (!UUID) {
+                if (creatorSession)
+                    UUID = creatorSession.pubquiz_uuid
+                else return message.reply(`You **haven't started** a Pubquiz yet.`)
+            }
+
             const doesExist = await db.oneOrNone(`
                 SELECT creator_id
                 FROM pubquiz
