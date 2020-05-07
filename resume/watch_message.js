@@ -13,19 +13,20 @@ exports.watchJoinMessage = (message, { sessionUuid, creator, categoryChannel, db
     joinMessage.react("✋")
 
     const joinFilter = (reaction, user) => {
-        return reaction.emoji.name === "✋" && user.id !== creator.id && user.id !== message.author.id && (48 - joinMessage.guild.channels.cache.size >= 0);
+        return reaction.emoji.name === "✋" && user.id !== creator.id && user.id !== message.author.id && (50 - 1 - joinMessage.channel.parent.children.size >= 0);
     }
 
     participantsCollector = new Discord.ReactionCollector(message, joinFilter, { dispose: true });
 
-    const updateMessage = async (participants) => {
+    const updateMessage = async (participants, joined) => {
         beforeCloseParticipants = participants
+        console.log(joinMessage.channel.parent.children)
         joinMessage = await message.edit(quizDetails(
             message.embeds.length > 0 ? message.embeds[0].title : null,
             message.embeds.length > 0 ? message.embeds[0].description : null,
             creator,
             participants,
-            48 - joinMessage.guild.channels.cache.size,
+            50 - joinMessage.channel.parent.children.size - (joined ? 1 : 0),
             openedTime,
             message.embeds.length > 0 ? message.embeds[0].thumbnail ? message.embeds[0].thumbnail.url : null : null,
             false
@@ -87,7 +88,7 @@ exports.watchJoinMessage = (message, { sessionUuid, creator, categoryChannel, db
                         RETURNING participants;
                     `, [sessionUuid, user.id, answersChannel.id])
 
-                    updateMessage(participants)
+                    updateMessage(participants, true)
                 })
             }
         }
@@ -162,7 +163,7 @@ exports.stopJoinMessage = async (sessionUuid) => {
                         avatarURL: joinMessage.embeds.length > 0 ? joinMessage.embeds[0].author.iconURL : null
                     },
                     results.participants,
-                    48 - joinMessage.guild.channels.cache.size,
+                    50 - joinMessage.channel.parent.children.size,
                     results.opened_time,
                     joinMessage.embeds.length > 0 ? joinMessage.embeds[0].thumbnail ? joinMessage.embeds[0].thumbnail.url : null : null,
                     true
