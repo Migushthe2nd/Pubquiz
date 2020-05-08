@@ -190,7 +190,7 @@ module.exports = class extends Inhibitor {
                             case 'IS_ORIGINAL_CREATOR':
                                 if (pubquiz === undefined) message.resolved.pubquiz = await getPubquiz(authorId)
                                 if (pubquiz.creator_id !== authorId)
-                                    throw `You are **not the original creator** of this pubquiz, so you cannot modify the questions. You may use the copy command to enable editing.`
+                                    throw `You are **not the original creator** of this pubquiz, so you cannot modify the questions. In the future you may use the copy command to enable editing.`
                                 break;
 
                             case 'HAS_QUESTIONS':
