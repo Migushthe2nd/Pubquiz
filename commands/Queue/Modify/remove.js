@@ -47,7 +47,7 @@ module.exports = class extends PubCommand {
                             AND question_nr = $2;
 
                         UPDATE pubquiz_questions
-                        SET question_nr = question_nr
+                        SET question_nr = question_nr - 1
                         WHERE question_nr > $2;
                     `, [message.resolved.pubquiz.pubquiz_uuid, questionNr])
                     message.reply("Question **successfully removed** from the queue.")
