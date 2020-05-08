@@ -1,5 +1,5 @@
 const PubCommand = require('../../PubCommand')
-const { startQuestionCountdown } = require('../../resume/watch_message')
+const { stopQuestion, startQuestionCountdown } = require('../../resume/watch_message')
 const { questionNew } = require('../../embeds')
 const { db } = require('../../db')
 
@@ -17,6 +17,14 @@ module.exports = class extends PubCommand {
 
     async run (message) {
         try {
+            const questionMessage = await message.guild.channels.cache.get(message.resolved.session.feed_channel_id).messages.fetch(message.resolved.session.question_message_id)
+
+            stopQuestion(questionMessage, {
+                sessionUuid: message.resolved.session.session_uuid,
+                questionNr: message.resolved.session.question_nr,
+                creator: message.author
+            })
+
             const nextQuestion = await db.oneOrNone(`
                 SELECT *
                 FROM pubquiz_questions
