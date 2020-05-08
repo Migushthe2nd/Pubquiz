@@ -1,12 +1,54 @@
 const { watchJoinMessage, startQuestionCountdown } = require('./watch_message')
 const { db } = require('../db')
+let activityIndex = 0;
+
+const getActiveAmountString = () =>
+    new Promise(resolve => {
+        db.oneOrNone(`
+        SELECT COUNT(*)
+        FROM pubquiz_sessions`
+        ).then(({ count }) => {
+            resolve(`${count} ongoing pubquizzes`)
+        })
+    })
+
+const activities_list = [
+    {
+        message: getActiveAmountString,
+        type: "LISTENING",
+    },
+];
+
+const setActivity = async (client) => {
+    const value = activities_list[activityIndex].message
+    const message = typeof value === 'function' ? await value(client) : value
+
+    client.user.setActivity(
+        `${process.env.BOT_PREFIX} help | ${message}`,
+        {
+            type: "LISTENING",
+        }
+    );
+
+    if (activityIndex === activities_list.length - 1)
+        activityIndex = 0;
+    else activityIndex++
+}
+
+exports.setActivities = (client) => {
+    setActivity(client)
+    setInterval(async () => {
+        setActivity(client)
+    }, 30000)
+
+}
 
 exports.resumeQuizes = async (client) => {
     const activeQuizes = await db.any(`
         SELECT pubquiz.*, pubquiz_sessions.*
-        FROM pubquiz_sessions
+            FROM pubquiz_sessions
         INNER JOIN pubquiz
-            ON pubquiz.pubquiz_uuid = pubquiz_sessions.pubquiz_uuid;
+        ON pubquiz.pubquiz_uuid = pubquiz_sessions.pubquiz_uuid;
     `)
 
     // Resume each quiz
@@ -19,7 +61,7 @@ exports.resumeQuizes = async (client) => {
 
         if (controlsChannel && feedChannel) {
             // Say "I just restarted"
-            controlsChannel.send(`<@!${creator.id}>, My program got restarted just now. I tried to resume everything, but if something is off please notify Migush#4096.`)
+            controlsChannel.send(`<@!${creator.id}>, My program got restarted just now.I tried to resume everything, but if something is off please notify Migush#4096.`)
 
             // Resume join message
             if (pubquiz.join_message_id && pubquiz.question_nr === 0) {
@@ -47,15 +89,15 @@ exports.resumeQuizes = async (client) => {
             }
 
             db.none(`
-                -- DELETE FROM pubquiz_scores
-                -- WHERE session_uuid = $1;
+        --DELETE FROM pubquiz_scores
+        --WHERE session_uuid = $1;
 
-                DELETE FROM pubquiz_participants
-                WHERE session_uuid = $1;
+        DELETE FROM pubquiz_participants
+        WHERE session_uuid = $1;
 
-                DELETE FROM pubquiz_sessions
-                WHERE session_uuid = $1;
-            `, [pubquiz.session_uuid])
+        DELETE FROM pubquiz_sessions
+        WHERE session_uuid = $1;
+        `, [pubquiz.session_uuid])
         }
     })
 }
