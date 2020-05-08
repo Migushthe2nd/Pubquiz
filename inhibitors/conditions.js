@@ -112,7 +112,7 @@ module.exports = class extends Inhibitor {
                             case 'ACTIVE_SESSION':
                                 if (session === undefined) message.resolved.session = await getSession(authorId)
                                 if (!session)
-                                    throw `You **haven't started** a Pubquiz yet.`
+                                    throw `You **haven't created** a Pubquiz yet.`
                                 break;
 
                             case 'NO_ACTIVE_SESSION':
