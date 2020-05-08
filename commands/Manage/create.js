@@ -182,7 +182,7 @@ module.exports = class extends PubCommand {
 				embed: newPubquiz(creatorName, pubquizData.creator_avatarurl, pubquizData.title, pubquizData.description, null, pubquizData.pubquiz_uuid, pubquizData.pubquiz_password, pubquizData.image_url)
 			})
 			// message.author.send(`**Your Pubquiz details:**
-			// \`\`\`UUID: ${pubquizData.pubquiz_uuid}\nPassword: ${pubquizData.pubquiz_password}\`\`\`\nYou may share the UUID with others so that they can also use your Pubquiz. They will need to make a copy before they can edit the queue. \nUsing the password you can edit the Pubquiz either in Discord or onine (in the future).\nPubquizes without questions will be removed after 7 days.
+			// \`\`\`UUID: ${pubquizData.pubquiz_uuid}\nPassword: ${pubquizData.pubquiz_password}\`\`\`\nYou may share the UUID with others so that they can also use your Pubquiz. They will need to make a copy before they can edit the queue. \nUsing the password you can edit the Pubquiz either in Discord or onine (in the future).\nPubquizzes without questions will be removed after 7 days.
 			// `)
 		} catch (e) {
 			console.log(e)

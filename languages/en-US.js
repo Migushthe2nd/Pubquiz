@@ -17,7 +17,7 @@ module.exports = class extends Language {
             COMMAND_HELP_USAGE: 'Usage',
             COMMAND_INFO: [
                 '```asciidoc',
-                'Pubquiz is a bot which can help organise pubquizes in Discord servers.',
+                'Pubquiz is a bot which can help organise pubquizzes in Discord servers.',
                 'Configured quizes are stored in a database and can be used multiple times by anyone if the creator shares the UUID.',
                 '',
                 'Planned features:',

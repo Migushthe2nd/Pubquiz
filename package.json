@@ -1,7 +1,7 @@
 {
 	"name": "pubquiz",
 	"version": "1.0.0",
-	"description": "A Discord bot for setting up Pubquizes!",
+	"description": "A Discord bot for setting up Pubquizzes!",
 	"main": "index.js",
 	"scripts": {
 		"start": "pm2 start pubquiz.js --watch",
