@@ -2,26 +2,56 @@ const { watchJoinMessage, startQuestionCountdown } = require('./watch_message')
 const { db } = require('../db')
 let activityIndex = 0;
 
-const getActiveAmountString = () =>
+const getSessionCountString = () =>
     new Promise(resolve => {
         db.oneOrNone(`
-        SELECT COUNT(*)
-        FROM pubquiz_sessions`
+            SELECT COUNT(*)::int
+            FROM pubquiz_sessions`
         ).then(({ count }) => {
-            resolve(`${count} ongoing pubquizzes`)
+            resolve(count !== 1 ? `${count} ongoing pubquizzes` : `${count} ongoing pubquiz`)
+        })
+    })
+
+const getParticipantCountString = () =>
+    new Promise(resolve => {
+        db.oneOrNone(`
+            SELECT COUNT(*)::int
+            FROM pubquiz_participants`
+        ).then(({ count }) => {
+            resolve(count !== 1 ? `${count} participants` : `${count} participant`)
+        })
+    })
+
+const getQuestionCountString = () =>
+    new Promise(resolve => {
+        db.oneOrNone(`
+            SELECT COUNT(*)::int
+            FROM pubquiz_questions`
+        ).then(({ count }) => {
+            resolve(count !== 1 ? `${count} questions` : `${count} question`)
+        })
+    })
+const getCreatedCountString = () =>
+    new Promise(resolve => {
+        db.oneOrNone(`
+            SELECT COUNT(*)::int
+            FROM pubquiz`
+        ).then(({ count }) => {
+            resolve(`${count} created`)
         })
     })
 
 const activities_list = [
-    {
-        message: getActiveAmountString,
-        type: "LISTENING",
-    },
+    getSessionCountString,
+    getParticipantCountString,
+    getQuestionCountString,
+    getCreatedCountString,
+    client => client.guilds.cache.size !== 1 ? `${client.guilds.cache.size} guilds` : `${client.guilds.cache.size} guild`
 ];
 
 const setActivity = async (client) => {
-    const value = activities_list[activityIndex].message
-    const message = typeof value === 'function' ? await value(client) : value
+    const item = activities_list[activityIndex]
+    const message = typeof item === 'function' ? await item(client) : item
 
     client.user.setActivity(
         `${process.env.BOT_PREFIX} help | ${message}`,
@@ -39,8 +69,7 @@ exports.setActivities = (client) => {
     setActivity(client)
     setInterval(async () => {
         setActivity(client)
-    }, 30000)
-
+    }, 20000)
 }
 
 exports.resumeQuizes = async (client) => {
