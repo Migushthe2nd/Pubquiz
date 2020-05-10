@@ -50,6 +50,8 @@ module.exports = class extends PubCommand {
                     })
                 });
 
+                message.reply(`The questions was **stopped successfully**.`)
+
                 db.none(`
                     UPDATE pubquiz_sessions 
                     SET is_active = false
