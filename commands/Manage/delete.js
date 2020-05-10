@@ -119,7 +119,7 @@ module.exports = class extends PubCommand {
                             message.reply("Something **went wrong** while trying to delete the Pubquiz :/")
                         }
                     } else {
-                        message.reply("There seem to be other people playing this Pubquiz. Removing this Pubquiz will stop theirs. If you are really sure, instead of `yes` answer with `force`")
+                        message.reply("There seem to be other people playing this Pubquiz. Removing this Pubquiz will stop theirs. If you are really sure, instead of `yes` answer with `force`.")
                     }
                 } else {
                     message.reply("You are not the original creator of this pubquiz, so you cannot delete it.")
