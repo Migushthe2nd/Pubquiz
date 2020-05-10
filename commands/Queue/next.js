@@ -7,7 +7,7 @@ module.exports = class extends PubCommand {
     constructor(...args) {
         super(...args, {
             name: 'next',
-            description: 'Start the next question.',
+            description: language => language.get('COMMAND_NEXT_DESCRIPTION'),
             runIn: ['text'],
             conditions: ['ACTIVE_SESSION', 'CONTROLS_CHANNEL', 'HAS_STARTED', 'IS_NOT_ACTIVE_COUNTDOWN'],
             requiredPermissions: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'ADD_REACTIONS', 'MANAGE_MESSAGES', 'ATTACH_FILES', 'USE_EXTERNAL_EMOJIS', 'MANAGE_ROLES'],

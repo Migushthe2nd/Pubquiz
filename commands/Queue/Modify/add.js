@@ -6,7 +6,7 @@ module.exports = class extends PubCommand {
     constructor(...args) {
         super(...args, {
             name: 'add',
-            description: 'Add a new question to the queue.',
+            description: language => language.get('COMMAND_ADD_DESCRIPTION'),
             // examples: ['add "How many toes does a goat have?" 120'],
             runIn: ['text'],
             examples: ['add "How many toes does a goat have?" 120', 'add "What is 20+4?" https://example.com/image.png'],

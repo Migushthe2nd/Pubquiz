@@ -6,6 +6,8 @@ module.exports = class extends PubCommand {
     constructor(...args) {
         super(...args, {
             name: 'test',
+            permissionLevel: 10,
+            guarded: true,
             description: 'Test everything in this command',
             runIn: ['text'],
             enabled: false

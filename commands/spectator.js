@@ -5,7 +5,7 @@ module.exports = class extends PubCommand {
     constructor(...args) {
         super(...args, {
             name: 'spectator',
-            description: 'Toggle spectator for a user. This will allow them to view the answers channels, unlike just keeping the Pubquiz visible.',
+            description: language => language.get('COMMAND_SPECTATOR_DESCRIPTION'),
             runIn: ['text'],
             examples: ['spectator @member1', 'spectator @member1 @member2 @member3'],
             usage: '<member:member> [...]',

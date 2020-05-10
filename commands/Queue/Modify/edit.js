@@ -5,7 +5,7 @@ module.exports = class extends PubCommand {
     constructor(...args) {
         super(...args, {
             name: 'edit',
-            description: 'Edit a question in the queue.',
+            description: language => language.get('COMMAND_EDIT_DESCRIPTION'),
             aliases: ['modify'],
             // examples: ['edit "How many toes does a goat have?" 120'],
             runIn: ['text'],

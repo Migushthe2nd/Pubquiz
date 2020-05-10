@@ -112,97 +112,97 @@ module.exports = class extends Inhibitor {
                             case 'ACTIVE_SESSION':
                                 if (session === undefined) message.resolved.session = await getSession(authorId)
                                 if (!session)
-                                    throw `You **haven't created** a Pubquiz yet.`
+                                    throw message.language.get('NO_ACTIVE_SESSION')
                                 break;
 
                             case 'NO_ACTIVE_SESSION':
                                 if (session === undefined) message.resolved.session = await getSession(authorId)
                                 if (session)
-                                    throw `You have **already created** a Pubquiz here: ${this.client.guilds.cache.get(session.guild_id).channels.cache.get(session.controls_channel_id)}. There can only be one created Pubquiz per user.`
+                                    throw message.language.get('ACTIVE_SESSION', this.client.guilds.cache.get(session.guild_id).channels.cache.get(session.controls_channel_id))
                                 break;
 
                             case 'IS_PARTICIPANT':
                                 if (participation === undefined) message.resolved.participation = await getParticipation(authorId)
                                 if (!participation)
-                                    throw `You **aren't** a participant yet.`
+                                    throw message.language.get('IS_NOT_PARTICIPANT')
                                 break;
 
                             case 'IS_NOT_PARTICIPANT':
                                 if (participation === undefined) message.resolved.participation = await getParticipation(authorId)
                                 if (participation)
-                                    throw `You are **already participating** in a Pubquiz here: ${this.client.guilds.cache.get(participation.guild_id).channels.cache.get(participation.feed_channel_id)}.`
+                                    throw message.language.get('IS_PARTICIPANT', this.client.guilds.cache.get(participation.guild_id).channels.cache.get(participation.feed_channel_id))
                                 break;
 
                             case 'CORRECT_GUILD':
                                 if (session === undefined) message.resolved.session = await getSession(authorId)
                                 if (!(session.guild_id === guildId))
-                                    throw `You must use this command in ${this.client.guilds.cache.get(session.guild_id)}.`
+                                    throw message.language.get('INCORRECT_GUILD', this.client.guilds.cache.get(session.guild_id))
                                 break;
 
                             case 'CONTROLS_CHANNEL_OR_FEED_CHANNEL':
                                 if (session === undefined) message.resolved.session = await getSession(authorId)
                                 if (!(session.guild_id === guildId && (session.controls_channel_id === channelId || session.feed_channel_id === channelId)))
-                                    throw `You may only use this command in ${this.client.guilds.cache.get(session.guild_id).channels.cache.get(session.feed_channel_id)} and ${this.client.guilds.cache.get(session.guild_id).channels.cache.get(session.controls_channel_id)}.`
+                                    throw message.language.get('NOT_CONTROLS_CHANNEL_OR_FEED_CHANNEL', this.client.guilds.cache.get(session.guild_id).channels.cache.get(session.feed_channel_id), this.client.guilds.cache.get(session.guild_id).channels.cache.get(session.controls_channel_id))
                                 break;
 
                             case 'CONTROLS_CHANNEL':
                                 if (session === undefined) message.resolved.session = await getSession(authorId)
                                 if (!(session.guild_id === guildId && session.controls_channel_id === channelId))
-                                    throw `You must use this command in ${this.client.guilds.cache.get(session.guild_id).channels.cache.get(session.controls_channel_id)}.`
+                                    throw message.language.get('NOT_CONTROLS_CHANNEL', this.client.guilds.cache.get(session.guild_id).channels.cache.get(session.controls_channel_id))
                                 break;
 
                             case 'HAS_PARTICIPANTS':
                                 if (session === undefined) message.resolved.session = await getSession(authorId)
                                 if (!(session.participants && session.participants.length > 0))
-                                    throw `The Pubquiz has **no participants** yet. Be sure to use the open command so people can join.`
+                                    throw message.language.get('HAS_NO_PARTICIPANTS')
                                 break;
 
                             case 'HAS_STARTED':
                                 if (session === undefined) message.resolved.session = await getSession(authorId)
                                 if (!session.has_started)
-                                    throw `The Pubquiz has **not been started** yet.`
+                                    throw message.language.get('HAS_NOT_STARTED')
                                 break;
 
                             case 'HAS_NOT_STARTED':
                                 if (session === undefined) message.resolved.session = await getSession(authorId)
                                 if (session.has_started)
-                                    throw `The Pubquiz has **already been started**.`
+                                    throw message.language.get('HAS_STARTED')
                                 break;
 
                             case 'IS_OPEN':
                                 if (session === undefined) message.resolved.session = await getSession(authorId)
                                 if (!session.is_open)
-                                    throw `The Pubquiz is **still closed**.`
+                                    throw message.language.get('IS_NOT_OPEN')
                                 break;
 
                             case 'IS_NOT_OPEN':
                                 if (session === undefined) message.resolved.session = await getSession(authorId)
                                 if (session.is_open)
-                                    throw `The Pubquiz is **already open**.`
+                                    throw message.language.get('IS_OPEN')
                                 break;
 
                             case 'IS_NOT_ACTIVE_COUNTDOWN':
                                 if (session === undefined) message.resolved.session = await getSession(authorId)
                                 if (session.countdown_endtime)
-                                    throw `There is an **ongoing timed question**. You **can't** manually stop it so please wait for it to finish.`
+                                    throw message.language.get('IS_ACTIVE_COUNTDOWN')
                                 break;
 
                             case 'IS_ORIGINAL_CREATOR':
                                 if (pubquiz === undefined) message.resolved.pubquiz = await getPubquiz(authorId)
                                 if (pubquiz.creator_id !== authorId)
-                                    throw `You are **not the original creator** of this pubquiz, so you cannot modify the questions. In the future you may use the copy command to enable editing.`
+                                    throw message.language.get('IS_NOT_ORIGINAL_CREATOR')
                                 break;
 
                             case 'HAS_QUESTIONS':
                                 if (questions === undefined) message.resolved.questions = await getQuestions(authorId)
                                 if (!(questions && questions.length > 0))
-                                    throw `The Pubquiz has **no questions** yet.`
+                                    throw message.language.get('HAS_NO_QUESTIONS')
                                 break;
 
                             // case 'QUESTION_EXISTS':
                             //     if (question === undefined) message.resolved.question = await getQuestion(authorId, questionNr)
                             //     if (!question)
-                            //         throw `Question ${questionNr} **does not exist** yet.`
+                            //         throw message.language.get('QUESTION_NOT_EXISTS', questionNr)
                             //     break;
                         }
                     }

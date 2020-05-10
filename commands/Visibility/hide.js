@@ -4,7 +4,7 @@ module.exports = class extends PubCommand {
     constructor(...args) {
         super(...args, {
             name: 'hide',
-            description: 'Hide the Pubquiz for non-participants.',
+            description: language => language.get('COMMAND_HIDE_DESCRIPTION'),
             runIn: ['text'],
             conditions: ['ACTIVE_SESSION', 'CONTROLS_CHANNEL'],
             requiredPermissions: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'MANAGE_MESSAGES', 'MANAGE_ROLES'],

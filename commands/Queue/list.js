@@ -5,7 +5,7 @@ module.exports = class extends PubCommand {
         super(...args, {
             name: 'list',
             aliases: ['questions', 'queue'],
-            description: 'Show all questions in the queue.',
+            description: language => language.get('COMMAND_LIST_DESCRIPTION'),
             runIn: ['text'],
             conditions: ['ACTIVE_SESSION', 'CONTROLS_CHANNEL', 'HAS_QUESTIONS'],
             requiredPermissions: ['VIEW_CHANNEL', 'SEND_MESSAGES'],

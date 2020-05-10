@@ -5,7 +5,7 @@ module.exports = class extends PubCommand {
         super(...args, {
             name: 'clearchat',
             runIn: ['text'],
-            description: 'Remove all messages in #feed or #controls depending on where you use it. Does not remove the join and help messages.',
+            description: language => language.get('COMMAND_CLEARCHAT_DESCRIPTION'),
             usage: '<confirm:boolean>',
             promptLimit: true,
             conditions: ['ACTIVE_SESSION', 'CONTROLS_CHANNEL_OR_FEED_CHANNEL'],

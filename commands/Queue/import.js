@@ -6,7 +6,7 @@ module.exports = class extends PubCommand {
     constructor(...args) {
         super(...args, {
             name: 'import',
-            description: 'Import questions from a spreadsheet. Columns: `question`, `seconds`, `image url`',
+            description: language => language.get('COMMAND_IMPORT_DESCRIPTION'),
             // examples: ['add "How many toes does a goat have?" 120'],
             runIn: ['text'],
             usage: '<spreadsheet:file>',

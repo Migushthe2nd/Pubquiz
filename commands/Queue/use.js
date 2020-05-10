@@ -6,7 +6,7 @@ module.exports = class extends PubCommand {
     constructor(...args) {
         super(...args, {
             name: 'use',
-            description: 'Use questions from an existing Pubquiz. The current queue will be replaced with the new one! If you wish to go back, use this command again and specify the UUID I DM\'ed you earlier.',
+            description: language => language.get('COMMAND_USE_DESCRIPTION'),
             // examples: ['use 902fa8c6-8a23-11ea-bc55-0242ac130003'],
             runIn: ['text'],
             examples: ['use 902fa8c6-8a23-11ea-bc55-0242ac130003'],

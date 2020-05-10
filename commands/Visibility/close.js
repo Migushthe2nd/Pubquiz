@@ -7,7 +7,7 @@ module.exports = class extends PubCommand {
         super(...args, {
             name: 'close',
             runIn: ['text'],
-            description: 'Close participation.',
+            description: language => language.get('COMMAND_CLOSE_DESCRIPTION'),
             promptLimit: true,
             conditions: ['ACTIVE_SESSION', 'CONTROLS_CHANNEL', 'HAS_NOT_STARTED', 'IS_OPEN'],
             requiredPermissions: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'ADD_REACTIONS', 'MANAGE_MESSAGES', 'ATTACH_FILES', 'USE_EXTERNAL_EMOJIS', 'MANAGE_ROLES'],

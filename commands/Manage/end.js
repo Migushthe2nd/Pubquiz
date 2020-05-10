@@ -5,7 +5,7 @@ module.exports = class extends PubCommand {
     constructor(...args) {
         super(...args, {
             name: 'end',
-            description: 'Stop the quiz and remove all Pubquiz-related channels.',
+            description: language => language.get('COMMAND_END_DESCRIPTION'),
             runIn: ['text'],
             usage: '<confirm:boolean>',
             conditions: ['ACTIVE_SESSION', 'CONTROLS_CHANNEL'],

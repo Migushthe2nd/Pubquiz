@@ -7,7 +7,7 @@ module.exports = class extends PubCommand {
     constructor(...args) {
         super(...args, {
             name: 'start',
-            description: 'Close participation and start the first question.',
+            description: language => language.get('COMMAND_START_DESCRIPTION'),
             runIn: ['text'],
             conditions: ['ACTIVE_SESSION', 'CONTROLS_CHANNEL', 'HAS_PARTICIPANTS', 'HAS_NOT_STARTED'],
             requiredPermissions: ['MANAGE_GUILD', 'VIEW_CHANNEL', 'SEND_MESSAGES', 'ADD_REACTIONS', 'MANAGE_ROLES'],

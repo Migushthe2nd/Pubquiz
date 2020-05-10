@@ -5,7 +5,7 @@ module.exports = class extends PubCommand {
     constructor(...args) {
         super(...args, {
             name: 'remove',
-            description: 'Remove a question from the queue.',
+            description: language => language.get('COMMAND_REMOVE_DESCRIPTION'),
             // examples: ['remove 5 yes'],
             runIn: ['text'],
             examples: ['remove 5 yes'],

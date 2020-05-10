@@ -7,7 +7,7 @@ module.exports = class extends PubCommand {
         super(...args, {
             name: 'stop',
             aliases: ['lock'],
-            description: 'Stop the quiz. This will lock the answers channels and end the question.',
+            description: language => language.get('COMMAND_STOP_DESCRIPTION'),
             runIn: ['text'],
             // usage: '<confirm:boolean>',
             conditions: ['ACTIVE_SESSION', 'CONTROLS_CHANNEL', 'HAS_STARTED', 'IS_NOT_ACTIVE_COUNTDOWN'],
