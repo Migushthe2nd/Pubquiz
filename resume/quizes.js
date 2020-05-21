@@ -90,7 +90,7 @@ exports.resumeQuizes = async (client) => {
 
         if (controlsChannel && feedChannel) {
             // Say "I just restarted"
-            controlsChannel.send(`<@!${creator.id}>, My program got restarted just now.I tried to resume everything, but if something is off please notify Migush#4096.`)
+            controlsChannel.send(`<@!${creator.id}>, My program got restarted just now. I tried to resume everything, but if something is off please notify Migush#4096.`)
 
             // Resume join message
             if (pubquiz.join_message_id && pubquiz.question_nr === 0) {
