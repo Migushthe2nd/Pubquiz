@@ -40,13 +40,7 @@ module.exports = class extends Language {
             ],
             COMMAND_INVITE: () => [
                 `To add ${this.client.user.username} to your discord guild:`,
-                `<https://discord.com/api/oauth2/authorize?client_id=703920658198954055&permissions=8&scope=bot>`,
-                util.codeBlock('', [
-                    'The above link is generated requesting the minimum permissions required to use every command currently.',
-                    'I know not all permissions are right for every guild, so don\'t be afraid to uncheck any of the boxes.',
-                    'If you try to use a command that requires more permissions than the bot is granted, it will let you know.'
-                ].join(' ')),
-                'Please file an issue at <https://github.com/dirigeants/klasa> if you find any bugs.'
+                `<https://discord.com/api/oauth2/authorize?client_id=703920658198954055&permissions=8&scope=bot>`
             ],
             COMMAND_CREATE_DESCRIPTION: `Create a new Pubquiz. Use \`help create\` to view all parameters.`,
             COMMAND_DELETE_DESCRIPTION: `Delete a Pubquiz by UUID. Active quizes will be stopped if forced. This will remove questions. If you wish to keep those, use the end command to end the Pubquiz. Only the original creator of the Pubquiz is able to use this command.`,
