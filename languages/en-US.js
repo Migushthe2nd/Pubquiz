@@ -1,4 +1,4 @@
-const { Language } = require('klasa');
+const { Language, util } = require('klasa');
 
 module.exports = class extends Language {
 
@@ -37,6 +37,10 @@ module.exports = class extends Language {
                 '',
                 `Pubquiz V${this.client.config.version}`,
                 '--------------```'
+            ],
+            COMMAND_INVITE: () => [
+                `To add ${this.client.user.username} to your discord guild:`,
+                `<https://discord.com/api/oauth2/authorize?client_id=703920658198954055&permissions=8&scope=bot>`
             ],
             COMMAND_CREATE_DESCRIPTION: `Create a new Pubquiz. Use \`help create\` to view all parameters.`,
             COMMAND_DELETE_DESCRIPTION: `Delete a Pubquiz by UUID. Active quizes will be stopped if forced. This will remove questions. If you wish to keep those, use the end command to end the Pubquiz. Only the original creator of the Pubquiz is able to use this command.`,
