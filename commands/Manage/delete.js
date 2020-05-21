@@ -8,7 +8,7 @@ module.exports = class extends PubCommand {
             description: language => language.get('COMMAND_DELETE_DESCRIPTION'),
             usage: '[UUID:uuid] <confirm:boolean|force>',
             examples: ['delete yes', 'delete e52cf51d-1ae1-417c-a42e-f7e096d07d21 yes'],
-            requiredPermissions: ['MANAGE_GUILD', 'VIEW_CHANNEL', 'SEND_MESSAGES'],
+            // requiredPermissions: ['MANAGE_GUILD', 'VIEW_CHANNEL', 'SEND_MESSAGES'],
             conditions: [],
             cooldown: 1,
 
