@@ -9,7 +9,7 @@ module.exports = class extends PubCommand {
             aliases: ['modify'],
             // examples: ['edit "How many toes does a goat have?" 120'],
             runIn: ['text'],
-            examples: ['edit "How many toes does a goat have?" 120 https://example.com/image.png'],
+            examples: ['edit 4 "How may toes does a cow have?" 60 https://example.com/another_image.png'],
             usage: '<questionNr:integer> [question:string{,500}] [countdown:integer{,3600}] [image:image]',
             conditions: ['ACTIVE_SESSION', 'CONTROLS_CHANNEL', 'IS_ORIGINAL_CREATOR', 'HAS_NOT_STARTED', 'HAS_QUESTIONS'],
             requiredPermissions: ['VIEW_CHANNEL', 'SEND_MESSAGES'],
